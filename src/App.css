@@ -1,38 +1,320 @@
-.App {
-  text-align: center;
+@import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@200;300;400&display=swap");
+
+:root {
+  --main-color-warning: #fa8500;
+  --main-color-success: #0db100;
+  --main-color-info: #03b4cf;
+  --main-color-info-secondary-background: #e6f1f2;
+  --main-color-info-secondary-accent: #1468fa;
+  --main-color-error: #e10303;
+  --main-color-danger: #ff5100;
+  --body-font: "Montserrat", sans-serif;
+  --main-color-light-bg: #ecf3fc;
+
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+body {
+  overflow-x: hidden !important;
+ 
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
+* {
+  font-family: var(--body-font);
+  font-weight: normal !important;
 }
 
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+
+:root {
+  --main-color-warning: #fa8500;
+  --main-color-success: #0db100;
+  --main-color-info: #03b4cf;
+  --main-color-info-secondary-background: #e6f1f2;
+  --main-color-info-secondary-accent: #1468fa;
+  --main-color-error: #e10303;
+  --main-color-danger: #ff5100;
+  --body-font: "Montserrat", sans-serif;
+
+  --main-color-primary: #1ec3cb;
+  --main-color-secondary: #a3e4db;
 }
 
-.App-link {
-  color: #61dafb;
+
+.button-Primary {
+  background-color: var(--main-color-primary) !important; /**#4705FF-Moradito azuloso 3106BB*/
+  color: white !important;
+  height: 35px !important;
+  border: none !important;
+  box-shadow: 0 0.25rem 0.35rem #c1fcf5 !important;
+  border-radius: 10px !important;
+  margin: 5px !important;
+  
+}
+.button-Primary:disabled {
+  background-color: #cfd1d1 !important; /**#4705FF-Moradito azuloso 3106BB*/
+  color: white !important;
+  height: 35px !important;
+  border: none !important;
+  box-shadow: none !important;
+  border-radius: 10px !important;
+  margin: 5px !important;
+  
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.button-Primary:hover {
+  background-color: #039bb3 !important; /**#4705FF-Moradito azuloso 3106BB*/
+  color: white !important;
+  height: 35px !important;
+  border: none !important;
+  box-shadow: 0 0.25rem 0.35rem #03b4cf !important;
+  border-radius: 10px !important;
+  margin: 5px !important;
+  
+}
+
+.button-Primary:hover:disabled {
+  background-color: #cfd1d1 !important; /**#4705FF-Moradito azuloso 3106BB*/
+  color: white !important;
+  box-shadow: none !important;
+  
+}
+
+.button-Secondary {
+  background-color: var(--main-color-secondary) !important; /**3106BB*/
+  color: var(--main-color-info-secondary-accent) !important;
+  height: 35px !important;
+  border: none !important;
+  border-radius: 10px !important;
+  box-shadow: none !important;
+  margin: 5px !important;
+  
+}
+
+.button-Secondary:disabled {
+  background-color: white !important; /**#4705FF-Moradito azuloso 3106BB*/
+  color: #cfd1d1 !important;
+  height: 35px !important;
+  border: #cfd1d1 1px solid !important;
+  box-shadow: none !important;
+  border-radius: 10px !important;
+  margin: 5px !important;
+  
+}
+
+.button-Secondary:hover {
+  box-shadow: 0 0.25rem 0.25rem var(--main-color-info-secondary-background) !important;
+}
+.button-Secondary:hover:disabled {
+  background-color: white !important; /**#4705FF-Moradito azuloso 3106BB*/
+  color: #95B0B0 !important;
+  height: 35px !important;
+  border: #95B0B0 1px solid !important;
+  box-shadow: none !important;
+  border-radius: 10px !important;
+  margin: 5px !important;
+  
+}
+
+.button-Success {
+  background-color: #0db100 !important; /**3106BB*/
+  color: white !important;
+  height: 35px !important;
+  border: none !important;
+  box-shadow: 0 0.25rem 0.35rem #8ef586;
+  border-radius: 10px !important;
+  margin: 5px !important;
+  
+}
+.button-Success:disabled {
+  background-color: #5ef354 !important; /**#4705FF-Moradito azuloso 3106BB*/
+  color: rgba(255, 255, 255, 0.96) !important;
+  height: 35px !important;
+  border: none !important;
+  box-shadow: none !important;
+  border-radius: 10px !important;
+  margin: 5px !important;
+  
+}
+
+.button-Success:hover {
+  background-color: #175a12 !important; /**3106BB*/
+  color: white !important;
+  height: 35px !important;
+  border: none !important;
+  box-shadow: 0 0.25rem 0.35rem #0b4b07;
+  border-radius: 10px !important;
+  margin: 5px !important;
+  
+}
+.button-Success:hover:disabled {
+  background-color: #5ef354 !important; /**#4705FF-Moradito azuloso 3106BB*/
+  color: rgba(255, 255, 255, 0.96) !important;
+  border: none !important;
+  box-shadow: none !important;
+  
+}
+
+.button-White-Primary {
+  background-color: white !important; /**#4705FF-Moradito azuloso 3106BB*/
+  color: #3d03e1 !important;
+  height: 35px !important;
+  border: none !important;
+  box-shadow: 0 0.25rem 0.35rem #5705ff !important;
+  border-radius: 10px !important;
+  margin: 5px !important;
+  
+}
+.button-White-Primary:hover {
+  background-color: rgb(
+    196,
+    201,
+    248
+  ) !important; /**#4705FF-Moradito azuloso 3106BB*/
+  color: #3d03e1 !important;
+  height: 35px !important;
+  border: none !important;
+  box-shadow: 0 0.25rem 0.35rem #5705ff !important;
+  border-radius: 10px !important;
+  margin: 5px !important;
+}
+.button-White-Primary:disabled {
+  background-color: rgb(
+    86,
+    102,
+    248
+  ) !important; /**#4705FF-Moradito azuloso 3106BB*/
+  color: #3d03e1 !important;
+  height: 35px !important;
+  border: none !important;
+  box-shadow: none !important;
+  border-radius: 10px !important;
+  margin: 5px !important;
+}
+
+.button-Error {
+  background-color: #e10303 !important; /**3106BB*/
+  color: white !important;
+  height: 35px !important;
+  border: none !important;
+  box-shadow: 0 0.25rem 0.35rem #f87c7c;
+  border-radius: 10px !important;
+  margin: 5px !important;
+  
+}
+
+.button-Error:disabled {
+  background-color: #f87c7c !important; /**3106BB*/
+  color: white !important;
+  border: none !important;
+  box-shadow: none !important ;
+  
+}
+
+.button-Error:hover {
+  background-color: #9e0303 !important; /**3106BB*/
+  color: white !important;
+  height: 35px !important;
+  border: none !important;
+  box-shadow: 0 0.25rem 0.35rem #eb1d1d;
+  
+}
+
+.button-Error:hover:disabled {
+  background-color: #f87c7c !important; /**3106BB*/
+  color: white !important;
+  border: none !important;
+  box-shadow: none !important ;
+  
+}
+
+.button-Warning {
+  background-color: #fa8500 !important; /**3106BB*/
+  color: white !important;
+  height: 35px !important;
+  border: none !important;
+  box-shadow: 0 0.25rem 0.35rem #fcd8af;
+  border-radius: 10px !important;
+  margin: 5px !important;
+  
+}
+
+.button-Warning:disabled {
+  background-color: #fcd8af !important; /**3106BB*/
+  color: #fa921b !important;
+  border: none !important;
+  box-shadow: none !important ;
+  
+}
+
+.button-Warning:hover {
+  background-color: #944f00 !important; /**3106BB*/
+  color: white !important;
+  height: 35px !important;
+  border: none !important;
+  box-shadow: 0 0.25rem 0.35rem #fa921b;
+  
+}
+
+.button-Warning:hover:disabled {
+  background-color: #fcd8af !important; /**3106BB*/
+  color: #fa921b !important;
+  border: none !important;
+  box-shadow: none !important ;
+  
+}
+
+.button-Primary-Two {
+  background-color: #9298cf !important; /**3106BB*/
+  color: white !important;
+  height: 35px !important;
+  border: none !important;
+  box-shadow: 0 0.25rem 0.35rem #b2b6d4 !important;
+  border-radius: 20px !important;
+  margin: 5px !important;
+}
+
+.button-Primary-Three {
+  background-color: #21d2e6 !important; /**3106BB*/
+  color: white !important;
+  height: 35px !important;
+  border: none !important;
+  box-shadow: 0 0.25rem 0.35rem #8fe4ee !important;
+  border-radius: 20px !important;
+  margin: 5px !important;
+}
+
+.button-Primary-Two:disabled {
+  background-color: #cfd1d1 !important; /**#4705FF-Moradito azuloso 3106BB*/
+  color: white !important;
+  height: 35px !important;
+  border: none !important;
+  box-shadow: none !important;
+  border-radius: 10px !important;
+  margin: 5px !important;
+}
+
+.button-Primary-Three:disabled {
+  background-color: #cfd1d1 !important; /**#4705FF-Moradito azuloso 3106BB*/
+  color: white !important;
+  height: 35px !important;
+  border: none !important;
+  box-shadow: none !important;
+  border-radius: 10px !important;
+  margin: 5px !important;
+}
+
+
+.border-none{
+  border: none !important;
+}
+.rounded-15{
+  border-radius: 15px !important;
+}
+
+.bg-light{
+  background-color: var(--main-color-light-bg) !important;
+}
+
+.imgPerfilUserProfile{
+  width: 150px !important;
+  height: 150px !important;
 }

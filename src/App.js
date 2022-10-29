@@ -1,25 +1,44 @@
-import logo from './logo.svg';
+import Login from './Components/Login';
 import './App.css';
+import {
+  Route,
+  BrowserRouter as Router,
+  Routes,
+ 
+  withRouter,
+  useHistory,
+} from "react-router-dom";
+import React, { Component } from "react";
+import "../node_modules/bootstrap/dist/css/bootstrap.min.css";
+import Devices_Operations from './Components/Devices_Operations';
 
-function App() {
+
+export default function App(props) {
+  const [authed, setAuthed] = React.useState(false);
+  const [user, setUser] = React.useState("");
+
+  const handleLoggin = (data) => {
+    setAuthed(true);
+    setUser(data);
+  };
+
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+    <Router>
+      <Routes>
+      <Route
+          path='/login' element={<Login
+            {...props}
+            handleLoggin={handleLoggin}
+            authed={authed}
+          />}
+          
+        />
+        <Route
+          path='/devices' element={<Devices_Operations/>}
+          
+        />
+      </Routes>
+    </Router>
+  )
 }
-
-export default App;
