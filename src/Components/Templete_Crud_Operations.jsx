@@ -10,6 +10,8 @@ import FormControl from "@mui/material/FormControl";
 import TablePagination from "@mui/material/TablePagination";
 import imageNotFound from "../Resources/undraw_no_data_re_kwbl.svg";
 import Table_Customized from "./Table_Customized";
+import Button from "@mui/material/Button";
+import AddIcon from "@mui/icons-material/Add";
 
 export default function Templete_Crud_Operations(props) {
   const {
@@ -22,27 +24,29 @@ export default function Templete_Crud_Operations(props) {
     valuesForColumnColumn,
     totalItems,
     isButtonDisable,
+    onElementSelect,
+    onHandleSwitch,
+    onHandleSelectionView,
     buttonsArray,
     buttonGeneral,
   } = props;
 
   const [filtrerBy, setFiltrerBy] = React.useState("");
-  const [viewSeleted, setViewSeleted] = React.useState("");
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
   const [page, setPage] = React.useState(0);
 
-  const onChangeFiltrered = () => {};
+  const onChangeFiltrered = (event) => {
+    setFiltrerBy(event.target.value);
+    onHandleSelectionView(filtrerBy);
+  };
 
   const onChangeSearch = () => {};
 
   const onSearch = () => {};
 
-  const onOrderSelected = () => {};
+  
 
-  const handleChangePage = () => {};
-
-  const handleChangeRowsPerPage = () => {};
-
+  
   return (
     <div className="  bg-lightBlue  h-100 w-100 ">
       <div className="col-12 col-lg-4 col-sm-12 p-0"></div>
@@ -112,7 +116,7 @@ export default function Templete_Crud_Operations(props) {
                         nameReporte.substring(0, 1).toUpperCase() +
                         nameReporte.substring(1, nameReporte.length) +
                         " " +
-                        viewSeleted.toLowerCase()}
+                        filtrerBy.toLowerCase()}
                     </h2>
                   </div>
                   <div className="card-body text-center">
@@ -130,32 +134,24 @@ export default function Templete_Crud_Operations(props) {
                       <div>
                         <Table_Customized
                           columns={columnsValue}
-                          onElementSelected={onOrderSelected}
-                          dataLoad={dataLoad}
+                          onElementSelected={onElementSelect}
+                          dataLoad={dataLoad} onHandleSwitch={onHandleSwitch}
                           idsCampoTypeObject={valuesForColumnColumn}
                           buttonsArray={buttonsArray}
                         />
-                        <TablePagination
-                          className="mt-3"
-                          rowsPerPageOptions={[5, 10, 25, 100]}
-                          component="div"
-                          count={totalItems}
-                          rowsPerPage={rowsPerPage}
-                          page={page}
-                          onPageChange={handleChangePage}
-                          onRowsPerPageChange={handleChangeRowsPerPage}
-                        />
+                       
                       </div>
                     )}
                   </div>
                   <div className="card-footer bg-transparent border-none justify-content-center align-content-center d-flex">
                     {buttonGeneral !== null ? (
-                      <input
-                        type="submit"
-                        className={buttonGeneral.className}
-                        value={buttonGeneral.value}
-                        onClick={buttonGeneral.onClick}
-                      />
+                      <Button variant="outlined" startIcon={<AddIcon />} 
+                      className={buttonGeneral.className}
+                     
+                      onClick={buttonGeneral.onClick}>
+                      {buttonGeneral.value}
+                    </Button>
+                      
                     ) : (
                       <div />
                     )}
@@ -169,3 +165,20 @@ export default function Templete_Crud_Operations(props) {
     </div>
   );
 }
+
+Templete_Crud_Operations.propTypes = {
+  columnasName: PropTypes.array.isRequired,
+  columnsValue: PropTypes.array.isRequired,
+  optionsHowToSee: PropTypes.array.isRequired,
+  optionsHowToFiltered: PropTypes.array.isRequired,
+  nameReporte: PropTypes.string.isRequired,
+  dataLoad: PropTypes.array.isRequired,
+  valuesForColumnColumn: PropTypes.array.isRequired,
+  rowsPerPage: PropTypes.number.isRequired,
+  page: PropTypes.number.isRequired,
+  totalItems: PropTypes.number.isRequired,
+  isButtonDisable: PropTypes.bool.isRequired,
+  buttonsArray: PropTypes.array.isRequired,
+  buttonGeneral: PropTypes.object.isRequired,
+};
+

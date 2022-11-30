@@ -1,50 +1,365 @@
-import Templete_Crud_Operations from "./Templete_Crud_Operations";
-import React from 'react';
-import PropTypes from 'prop-types';
-
+import Templete_Crud_Operations from "./Templete_Crud_New";
+import React from "react";
+import PropTypes from "prop-types";
+import Services from "../Services";
+import axios from "axios";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import { useNavigate } from "react-router-dom";
+import Device_Card from "./Device_Card";
+import Button from "@mui/material/Button";
+import AddIcon from "@mui/icons-material/Add";
+import ToggleOffIcon from "@mui/icons-material/ToggleOff";
+import ToggleOnIcon from "@mui/icons-material/ToggleOn";
+import ResponsiveAppBar from "./Helpers/AppBar";
+import Dialog_Device from "./Helpers/Dialog_Device";
+import Alert_MUI from "./Helpers/Alert_MUI";
+import AlertDialog from "./Helpers/AlertDialog";
+import MiniDrawer from "./Helpers/Drawer_MUI";
 
 
 
-export default function Devices_Operations(){
 
 
-    const [dataForLoad, setDataForLoad] = React.useState([]);
-    const [page, setPage] = React.useState(0);
-    const [totalItems, setTotalItems] = React.useState(0);
-    const [rowsPerPage, setRowsPerPage] = React.useState(10);
+export default function Devices_Operations() {
+  const [dataForLoad, setDataForLoad] = React.useState([]);
+  const [page, setPage] = React.useState(0);
+  const [totalItems, setTotalItems] = React.useState(0);
+  const [rowsPerPage, setRowsPerPage] = React.useState(10);
+  const [openDialog, setOpenDialog] = React.useState(false);
+  const [users_list, setUsers_list] = React.useState([]);
+  const [messageAlert, setMessageAlert] = React.useState("");
+  const [openAlert, setOpenAlert] = React.useState(false);
+  const [colorAlert, setColorAlert] = React.useState("");
+  const [openAlertDialog, setOpenAlertDialog] = React.useState(false);
+  const [userData, setUserData] = React.useState({});
 
-    const history = useNavigate();
+  React.useEffect(() => onLoadInfo, []);
 
-    const onChangeSearch = () => {
-    }
+  const history = useNavigate();
 
-    const onChangeRowPerPage = () => {
-    }
+  const onChangeSearch = () => {};
 
-    const onChangePage = () => {
-    }
+  const onChangeRowPerPage = () => {};
 
-    const onOrderSelect = () => {
-    }
+  const onChangePage = () => {};
 
-    const onHandleSelectionViewOrders = () => {
+  const onHandleStatusData = () => {
+    const tokenLocalStorage = Services.getValueFromCookies();
 
-    }
-
-    const onButtonClick = () => {
-    }
-
-    const onHandleButtonInsert = () => {
-
-    }
-
-
-    return (
-        <div className='container-fluid  bg-lightBlue  h-100 w-100 p-0' id='body-pd'>
+    axios
+      .put(
+        Services.changeStatusDevicesUrl() + userData.id,
+        {},
+        Services.getAxiosConfig(tokenLocalStorage)
+      )
+      .then((response) => {
+        if (
+          response.data.status === process.env.REACT_APP_DEVICE_STATUS_CHANGED
+        ) {
+          console.log("Device status changed");
+          onLoadInfo();
+        }
+      })
+      .catch((error) => {
+        if (error.response.status === 403) {
+          history("/login");
+          setTimeout(() => Services.habilitarBotones("button-Primary"), 1000);
+        } else if (error.response.status === 404) {
+          setMessageAlert("Dispositivo no encontrado"); 
+          setOpenAlert(true);
+          setColorAlert("error");
+          console.log("Error 404");
           
-          <Templete_Crud_Operations
+          setTimeout(() => Services.habilitarBotones("button-Primary"), 1000);
+        } else if (error.response.status === 500) {
+          setMessageAlert("Ha ocuurido un error en el servidor");
+          setOpenAlert(true);
+          setColorAlert("error");
+          console.log("Error 404");
+         
+          setTimeout(() => Services.habilitarBotones("button-Primary"), 1000);
+        } else {
+          setMessageAlert("Ha ocuurido un error en la conexion");
+          setOpenAlert(true);
+          setColorAlert("error");
+          console.log("Error 404");
+         
+          setTimeout(() => Services.habilitarBotones("button-Primary"), 1000);
+        }
+      });
+  };
+
+  const onHandleSelectionViewDevices = () => {};
+
+  const onButtonClick = () => {};
+
+  const onHandleButtonInsert = () => {
+    setOpenDialog(true);
+
+    const tokenLocalStorage = Services.getValueFromCookies();
+
+    axios
+      .get(
+        Services.getAllUsersHandlerDevicesUrl(),
+        Services.getAxiosConfig(tokenLocalStorage)
+      )
+      .then((response) => {
+        if (response.data.status === process.env.REACT_APP_USER_LOAD) {
+          setUsers_list(response.data.data);
+        }
+      })
+      .catch((error) => {
+        if (error.response.status === 403) {
+          history("/login");
+          setTimeout(() => Services.habilitarBotones("button-Primary"), 1000);
+        } else if (error.response.status === 404) {
+          setMessageAlert("Dispositivo no encontrado"); 
+          setOpenAlert(true);
+          setColorAlert("error");
+          console.log("Error 404");
+          
+          setTimeout(() => Services.habilitarBotones("button-Primary"), 1000);
+        } else if (error.response.status === 500) {
+          setMessageAlert("Ha ocuurido un error en el servidor");
+          setOpenAlert(true);
+          setColorAlert("error");
+          console.log("Error 404");
+         
+          setTimeout(() => Services.habilitarBotones("button-Primary"), 1000);
+        } else {
+          setMessageAlert("Ha ocuurido un error en la conexion");
+          setOpenAlert(true);
+          setColorAlert("error");
+          console.log("Error 404");
+         
+          setTimeout(() => Services.habilitarBotones("button-Primary"), 1000);
+        }
+      });
+  };
+
+  const onHandleSwitch = () => {
+   
+  };
+  const onDeviceSelect = (data) => {
+    setUserData(data);
+  };
+
+  const onLoadInfo = () => {
+    const tokenLocalStorage = Services.getValueFromCookies();
+
+    axios
+      .get(
+        Services.getAllDevicesUrl(),
+        Services.getAxiosConfig(tokenLocalStorage)
+      )
+      .then((response) => {
+        if (response.data.status === process.env.REACT_APP_DEVICE_LOAD) {
+          setDataForLoad(response.data.data);
+          setTotalItems(response.data.data.length);
+        }
+      })
+      .catch((error) => {
+        if (error.response.status === 403) {
+          history("/login");
+          setTimeout(() => Services.habilitarBotones("button-Primary"), 1000);
+        } else if (error.response.status === 404) {
+          setMessageAlert("Dispositivo no encontrado"); 
+          setOpenAlert(true);
+          setColorAlert("error");
+          console.log("Error 404");
+          
+          setTimeout(() => Services.habilitarBotones("button-Primary"), 1000);
+        } else if (error.response.status === 500) {
+          setMessageAlert("Ha ocuurido un error en el servidor");
+          setOpenAlert(true);
+          setColorAlert("error");
+          console.log("Error 404");
+         
+          setTimeout(() => Services.habilitarBotones("button-Primary"), 1000);
+        } else {
+          setMessageAlert("Ha ocuurido un error en la conexion");
+          setOpenAlert(true);
+          setColorAlert("error");
+          console.log("Error 404");
+         
+          setTimeout(() => Services.habilitarBotones("button-Primary"), 1000);
+        }
+      });
+  };
+
+  const onHandleDevice = (data) => {
+    setUserData(data);
+    setOpenAlertDialog(true);
+  };
+
+  const onSaveDevice = () => {
+    const tokenLocalStorage = Services.getValueFromCookies();
+
+    axios
+      .post(
+        Services.getAllDevicesUrl(),
+        userData,
+        Services.getAxiosConfig(tokenLocalStorage)
+      )
+      .then((response) => {
+        if (response.data.status === process.env.REACT_APP_DEVICE_CREATED) {
+          onLoadInfo();
+          setOpenDialog(false);
+          setMessageAlert("Dispositivo creado con éxito");
+          setOpenAlert(true);
+          setColorAlert("success");
+         
+        }
+      })
+      .catch((error) => {
+        if (error.response.status === 409) {
+          setMessageAlert("Ocurrió un conflicto al guardar el dispositivo");
+          setOpenAlert(true);
+          setColorAlert("error");
+          console.log("Error conflict");
+        }
+      });
+  };
+
+  return (
+    <div
+      className="container-fluid  bg-lightBlue  h-100 w-100 p-0"
+      id="body-pd"
+    >
+      <Alert_MUI
+        color={colorAlert}
+        msg={messageAlert}
+        open={openAlert}
+        onClose={() => {
+          setOpenAlert(false);
+        }}
+      />
+      <AlertDialog
+        color={"info"}
+        title={"Confirmación"}
+        msg={"¿Está seguro que desea guardar el dispositivo ?"}
+        open={openAlertDialog}
+        onSave={onSaveDevice}
+        onClose={() => {
+          setOpenAlertDialog(false);
+        }}
+      />
+      <MiniDrawer title="Dispositivos" itemSelected={3}/>
+      <Templete_Crud_Operations
+        page={page}
+        rowsPerPage={rowsPerPage}
+        onChangeRowPerPage={onChangeRowPerPage}
+        onChangePage={onChangePage}
+        user={""}
+        totalItems={totalItems}
+        onElementSelect={onDeviceSelect}
+        onHandleSelectionView={onHandleSelectionViewDevices}
+        columnasName={namesColumn}
+        onHandleSwitch={onHandleStatusData}
+        columnsValue={columnsToFill}
+        nameReporte="Dispositivos"
+        optionsHowToFiltered={namesColumn}
+        dataLoad={dataForLoad}
+        optionsHowToSee={["Ninguno", "Nombre", "DNI", "Email"]}
+        valueForButton={"Ver "}
+        onSearch={onChangeSearch}
+        isButtonDisable={true}
+        buttonsArray={[]}
+        buttonGeneral={{
+          value: "Insertar",
+          className: "button-Primary",
+          onClick: (ev) => {
+            ev.preventDefault();
+            onHandleButtonInsert();
+          },
+        }}
+      />
+      <Dialog_Device
+        onClose={() => setOpenDialog(false)}
+        onCloseSaved={onHandleDevice}
+        open={openDialog}
+        users={users_list}
+      />
+    </div>
+  );
+}
+
+let namesColumn = ["IMAGEN", "MARCA", "MODELO", "ESTADO"];
+
+let columnsToFill = [
+  {
+    id: "photo",
+    label: "FOTO",
+    minWidth: 70,
+    align: "center",
+    isObject: false,
+    format: (value) => value.toLocaleString("en-US"),
+  },
+  {
+    id: "brand",
+    label: "MARCA",
+    minWidth: 170,
+    align: "center",
+    isObject: false,
+    format: (value) => value.toLocaleString("en-US"),
+  },
+  {
+    id: "model",
+    label: "MODELO",
+    minWidth: 120,
+    align: "center",
+    isObject: true,
+    format: (value) => value.toLocaleString("en-US"),
+  },
+  {
+    id: "serialId",
+    label: "SERIAL ID",
+    minWidth: 120,
+    align: "center",
+    isObject: false,
+    format: (value) => value.toLocaleString("en-US"),
+  },
+  {
+    id: "status",
+    label: "Estado",
+    minWidth: 170,
+    align: "center",
+    isObject: false,
+    format: (value) => value.toLocaleString("en-US"),
+  },
+];
+
+let dataToFill = [
+  {
+    id: 1,
+    created_at: "2021-10-10",
+    status: "Activo",
+    brand: "Samsung",
+    model: "A03s",
+    photo:
+      "https://i.postimg.cc/KY5yTm67/samsung-galaxy-a03s-dual-sim-black-32gb-and-3gb-ram-sm-a037f-ds.png",
+  },
+  {
+    id: 2,
+    created_at: "2021-10-10",
+    status: "Inactivo",
+    brand: "Samsung",
+    model: "A03",
+    photo: "https://i.postimg.cc/jSyJgKdF/Samsung-A03.png",
+  },
+  {
+    id: 3,
+    created_at: "2021-10-10",
+    status: "Activo",
+    brand: "Raspberry Pi",
+    model: "Model 3",
+    photo: "https://i.postimg.cc/qvBzLKSz/Raspberry-Pi-4-Model-B-Side.png",
+  },
+];
+
+/*
+
+  <Templete_Crud_Operations
             page={page}
             rowsPerPage={rowsPerPage}
             onChangeRowPerPage={onChangeRowPerPage}
@@ -80,68 +395,4 @@ export default function Devices_Operations(){
                     onHandleButtonInsert();
             }}}
           />
-        </div>
-      );
-}
-
-let namesColumn = [
-    "Id",
-    "Fecha de compra",
-    "Costo",
-    "Monto total",
-    "Moneda",
-    "Hash",
-    "Oferta?",
-    "Confirmada?",
-  ];
-
-let columnsToFill = [
-    {
-      id: "id",
-      label: "Id",
-      minWidth: 170,
-      align: "center",
-      isObject: false,
-      format: (value) => value.toLocaleString("en-US"),
-    },
-    {
-      id: "created_at",
-      label: "Fecha de compra",
-      minWidth: 170,
-      align: "center",
-      isObject: false,
-      format: (value) => value.toLocaleString("en-US"),
-    },
-    {
-      id: "stateOrder",
-      label: "Estado",
-      minWidth: 120,
-      align: "center",
-      isObject: true,
-      format: (value) => value.toLocaleString("en-US"),
-    },
-    {
-      id: "total_price",
-      label: "Monto total",
-      minWidth: 120,
-      align: "center",
-      isObject: false,
-      format: (value) => value.toLocaleString("en-US"),
-    },
-    {
-      id: "currency_sign",
-      label: "Moneda",
-      minWidth: 170,
-      align: "center",
-      isObject: false,
-      format: (value) => value.toLocaleString("en-US"),
-    },
-    {
-      id: "confirmed_at",
-      label: "Confirmada?",
-      minWidth: 170,
-      align: "center",
-      isObject: false,
-      format: (value) => value.toLocaleString("en-US"),
-    },
-  ];
+  */

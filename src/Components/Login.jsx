@@ -2,11 +2,10 @@ import PropTypes from "prop-types";
 import axios from "axios";
 import React from "react";
 
-
 import TextField from "@mui/material/TextField";
 import FormHelperText from "@mui/material/FormHelperText";
 import FormControl from "@mui/material/FormControl";
-
+import Protocol_Controller from "../Auth_Module/Protocol_Controller";
 import {
   Route,
   BrowserRouter as Router,
@@ -16,8 +15,7 @@ import {
   useNavigate,
 } from "react-router-dom";
 import { styled } from "@mui/material/styles";
-
-
+import Alert_MUI from "./Helpers/Alert_MUI";
 
 import Services from "../Services";
 
@@ -25,22 +23,21 @@ import LoginImage from "../Resources/undraw_security_on_re_e491.svg";
 
 const CssTextField = styled(TextField)({
   "& label.Mui-focused": {
-    color: "#03b4cf",
+    color: "#2ecc71",
   },
-  
+
   "& .MuiInput-underline:after": {
-    borderBottomColor: "#03b4cf",
+    borderBottomColor: "#2ecc71",
   },
   "& .MuiOutlinedInput-root": {
     "& fieldset": {
-      
-      border: "2px solid rgb(169, 169, 169)",
+      border: "2px solid #2ecc71",
     },
     "&:hover fieldset": {
-      borderColor: "#03b4cf",
+      borderColor: "#2ecc71",
     },
     "&.Mui-focused fieldset": {
-      borderColor: "#03b4cf",
+      borderColor: "#2ecc71",
     },
   },
 });
@@ -52,6 +49,9 @@ export default function Login(props) {
   const [isError, setIsError] = React.useState(false);
   const [textButton, setTextButton] = React.useState("Iniciar Sesión");
   const [showPassword, setShowPassword] = React.useState(false);
+  const [messageAlert, setMessageAlert] = React.useState("");
+  const [openAlert, setOpenAlert] = React.useState(false);
+  const [colorAlert, setColorAlert] = React.useState("");
 
   React.useEffect(() => {}, []);
 
@@ -59,79 +59,74 @@ export default function Login(props) {
 
   const handleSuccessFullAuth = (data) => {
     props.handleLoggin(data);
-    history("/");
+    history("/users");
   };
-  const onLogin = (ev) => {
+
+  const onLogin = async (ev) => {
     ev.preventDefault();
     setTextButton("Iniciando...");
     Services.deshabilitarBotones("button-Primary");
 
-    axios
-      .post(Services.loginUrl(), {
-        user: username,
-        pass: password,
-      
-      })
+    let date1 = new Date();
+
+    let protocol = new Protocol_Controller();
+    await protocol
+      .ExecuteProtocol(username, password, Services.loginAdminUrl())
       .then((response) => {
-        if (response.data.status === 303) {
-          //alert(this.state.username+" , "+this.state.password);
-
+        if (response.data.status === process.env.REACT_APP_CRDEDENTIALS_OK) {
           Services.saveValueInCookies(response.data.data.token);
-          //sessionStorage.setItem('token', JSON.stringify(response.data.data.token));
-          //sessionStorage.setItem('user-token', JSON.stringify(response.data.data.user.username));
-          setTimeout(
-            () => Services.habilitarBotones("button-Primary"),
-            1000
-          );
-
-          handleSuccessFullAuth(response.data.data.user.username);
+          setTimeout(() => Services.habilitarBotones("button-Primary"), 1000);
+          let date2 = new Date();
+          console.log("Time to login: " + (date2 - date1) / 1000 + " s");
+          handleSuccessFullAuth(response.data.data.user);
         }
       })
       .catch((error) => {
-        if (error.response.error !== undefined) {
-          if (error.response.data.errors.pass !== undefined) {
-            setIsError(true);
-            setError("La contraseña debe ser mayor de 8 carácteres");
-            setTimeout(
-              () => Services.habilitarBotones("button-Primary"),
-              10000
-            );
-          } else if (error.response.data.errors.twofactor !== undefined) {
-           
-
-            setTimeout(
-              () => Services.habilitarBotones("button-Primary"),
-              10000
-            );
-          }
-        } else if (
-          error.response !== undefined &&
-          error.response.data.status === 301
-        ) {
-          setIsError(true);
-          setError("Credenciales incorrectas");
-          setTimeout(
-            () => Services.habilitarBotones("button-Primary"),
-            10000
-          );
-        } else if (
-          error.response !== undefined &&
-          error.response.data.status === 302
-        ) {
-          setIsError(true);
-          setError("Codigo invalido");
-          setTimeout(
-            () => Services.habilitarBotones("button-Primary"),
-            1000
-          );
+        if (error.response.status === 403) {
+          setMessageAlert("Credenciales incorrectas");
+          setOpenAlert(true);
+          setColorAlert("error");
+          console.log("Error 403");
+          setTextButton("Iniciar sesión");
+          setTimeout(() => Services.habilitarBotones("button-Primary"), 1000);
+        } else if (error.response.status === 404) {
+          setMessageAlert("Credenciales incorrectas");
+          setOpenAlert(true);
+          setColorAlert("error");
+          console.log("Error 404");
+          setTextButton("Iniciar sesión");
+          setTimeout(() => Services.habilitarBotones("button-Primary"), 1000);
+        } else if (error.response.status === 500) {
+          setMessageAlert("Ha ocuurido un error en el servidor");
+          setOpenAlert(true);
+          setColorAlert("error");
+          console.log("Error 404");
+          setTextButton("Iniciar sesión");
+          setTimeout(() => Services.habilitarBotones("button-Primary"), 1000);
+        } else {
+          setMessageAlert("Ha ocuurido un error en la conexion");
+          setOpenAlert(true);
+          setColorAlert("error");
+          console.log("Error 404");
+          setTextButton("Iniciar sesión");
+          setTimeout(() => Services.habilitarBotones("button-Primary"), 1000);
         }
       });
   };
+
   return (
-    <div className="w-100 h-100 w-100 position-absolute bg-light" >
-      <div className="col-lg-7 col-sm-12 col-12 m-auto justify-content-center align-content-center d-flex mt-2">
-        <div className="row bg-white shadow rounded-15 m-auto mt-3 justify-content-center align-content-center d-flex">
+    <div className="w-100 h-100 position-absolute bg-light login-backg justify-content-center align-items-lg-center d-flex">
+      <div className="col-lg-7 col-sm-12 col-12 ">
+        <div className="row bg-white shadow rounded-15 m-3 justify-content-center align-content-center d-flex ">
           <div className="col-lg-6 col-sm-9 col-9  justify-content-center align-content-center d-flex text-center">
+            <Alert_MUI
+              color={colorAlert}
+              msg={messageAlert}
+              open={openAlert}
+              onClose={() => {
+                setOpenAlert(false);
+              }}
+            />
             <div className="card  border-none text-center  ms-auto me-auto">
               <img src={LoginImage} height="85%" width={"85%"} />
             </div>
@@ -148,16 +143,16 @@ export default function Login(props) {
               </div>
 
               <div className="card-body  mt-0">
-                
                 <div className="row m-2  mt-5 col-lg-12 col-sm-12 col-12" id="">
                   <CssTextField
                     required
                     value={username}
                     className=""
-                    type={"text"} InputLabelProps={{ shrink: true }}
+                    type={"text"}
+                    InputLabelProps={{ shrink: true }}
                     onChange={(ev) => {
                       setUsername(ev.target.value);
-                    }} 
+                    }}
                     label="Nombre de usuario"
                   />
                 </div>
@@ -166,13 +161,12 @@ export default function Login(props) {
                     required
                     className=""
                     type={"password"}
-                    value={password} InputLabelProps={{ shrink: true }}
+                    value={password}
+                    InputLabelProps={{ shrink: true }}
                     onChange={(ev) => setPassword(ev.target.value)}
                     label="Contraseña"
                   />
                 </div>
-                
-                
               </div>
               <div className="card-footer border-none bg-transparent">
                 <div className="row w-100  justify-content-center align-content-center d-flex mt-4">
@@ -191,7 +185,6 @@ export default function Login(props) {
                       className="button-Primary w-75 "
                     />
                   </div>
-                
                 </div>
               </div>
             </div>
