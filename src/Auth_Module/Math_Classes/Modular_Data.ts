@@ -3,7 +3,7 @@ import { Random_Generator } from "./Random_Generator";
 const MODULUS = 251;
 
 export class Modular_Data {
-  _data: number = 0;
+  _data: number;
 
   constructor(newData: number) {
     if(newData === 0)

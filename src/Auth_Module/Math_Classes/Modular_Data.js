@@ -5,7 +5,6 @@ var Random_Generator_1 = require("./Random_Generator");
 var MODULUS = 251;
 var Modular_Data = /** @class */ (function () {
     function Modular_Data(newData) {
-        this._data = 0;
         if (newData === 0)
             this._data = 0;
         else

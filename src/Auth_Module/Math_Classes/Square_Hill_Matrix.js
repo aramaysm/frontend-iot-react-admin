@@ -47,7 +47,7 @@ var Square_Hill_Matrix = /** @class */ (function () {
             this._matrix = matrixNew.map(function (item) { return new Modular_Data_1.Modular_Data(item); });
         }
         else {
-            this._matrix = this.InitializeAs(-1, 8);
+            this._matrix = this.InitializeAs(4, 8);
         }
     }
     Square_Hill_Matrix.prototype.get_matrix = function () {
@@ -90,7 +90,7 @@ var Square_Hill_Matrix = /** @class */ (function () {
         if (order == 0)
             return new Array(0);
         switch (mtype) {
-            case -1:
+            case 4:
                 for (var i = 0; i < order * order; i++)
                     matrix[i] = new Modular_Data_1.Modular_Data(0);
             case 0:

@@ -14,7 +14,7 @@ class Square_Hill_Matrix {
     if (matrixNew !== null && matrixNew !== undefined && matrixNew.length > 0) {
       this._matrix = matrixNew.map((item) => new Modular_Data(item));
     } else {
-      this._matrix = this.InitializeAs(-1,8);
+      this._matrix = this.InitializeAs(4,8);
     }
   }
 
@@ -67,7 +67,7 @@ class Square_Hill_Matrix {
     if (order == 0) return new Array<Modular_Data>(0);
 
     switch (mtype) {
-      case -1:
+      case 4:
         for (let i = 0; i < order * order; i++) 
         matrix[i] = new Modular_Data(0);
     

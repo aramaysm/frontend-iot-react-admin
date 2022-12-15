@@ -153,17 +153,12 @@ export default class Client_Entity {
   }
   async phase_3(): Promise<any> {
    
-    let matrix_R: Square_Hill_Matrix = new Square_Hill_Matrix(MATRIXORDER, []);
-    let matrix_R_1: Square_Hill_Matrix = new Square_Hill_Matrix(
+   let matrix_R_1: Square_Hill_Matrix = new Square_Hill_Matrix(
       MATRIXORDER,
       []
     );
-    let matrix_R_2: Square_Hill_Matrix = new Square_Hill_Matrix(
-      MATRIXORDER,
-      []
-    );
-
    
+
     if (this._bValue === 0) {
       let witness_PowerOf_m_inverse = await this._witness.PowerOf(this._witness, -1 * this._mValue);
       let witness_PowerOf_n_inverse = await this._witness.PowerOf(this._witness, -1 * this._nValue);
@@ -182,9 +177,11 @@ export default class Client_Entity {
      
       let privateKey_to_k_inverse = new Square_Hill_Matrix(MATRIXORDER, []);
       let privateKey_to_n_inverse =  new Square_Hill_Matrix(MATRIXORDER, []);
-      privateKey_to_k_inverse = await this._privateKey.PowerOf(this._privateKey, -1 * this._kValue);
-     
-      privateKey_to_n_inverse = await this._privateKey.PowerOf(this._privateKey, -1 * this._nValue);
+      
+      privateKey_to_k_inverse = await this._privateKey.PowerOf(this._privateKey, 
+        -1 * this._kValue);
+      privateKey_to_n_inverse = await this._privateKey.PowerOf(this._privateKey, 
+        -1 * this._nValue);
       
       matrix_R_1 = await Square_Hill_Matrix.MultiplyHillMatrices(
         privateKey_to_k_inverse,
@@ -192,9 +189,7 @@ export default class Client_Entity {
       ); 
 
       this._challenge_response = await Square_Hill_Matrix.MultiplyHillMatrices(
-        matrix_R_1,
-        privateKey_to_n_inverse
-      ); 
+        matrix_R_1, privateKey_to_n_inverse); 
 
     }
 

@@ -141,13 +141,11 @@ var Client_Entity = /** @class */ (function () {
     };
     Client_Entity.prototype.phase_3 = function () {
         return __awaiter(this, void 0, void 0, function () {
-            var matrix_R, matrix_R_1, matrix_R_2, witness_PowerOf_m_inverse, witness_PowerOf_n_inverse, _a, privateKey_to_k_inverse, privateKey_to_n_inverse, _b;
+            var matrix_R_1, witness_PowerOf_m_inverse, witness_PowerOf_n_inverse, _a, privateKey_to_k_inverse, privateKey_to_n_inverse, _b;
             return __generator(this, function (_c) {
                 switch (_c.label) {
                     case 0:
-                        matrix_R = new Square_Hill_Matrix_1["default"](MATRIXORDER, []);
                         matrix_R_1 = new Square_Hill_Matrix_1["default"](MATRIXORDER, []);
-                        matrix_R_2 = new Square_Hill_Matrix_1["default"](MATRIXORDER, []);
                         if (!(this._bValue === 0)) return [3 /*break*/, 5];
                         return [4 /*yield*/, this._witness.PowerOf(this._witness, -1 * this._mValue)];
                     case 1:
