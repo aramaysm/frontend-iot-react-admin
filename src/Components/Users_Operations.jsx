@@ -32,6 +32,7 @@ export default function Users_Operations() {
   const [messageAlert, setMessageAlert] = React.useState("");
   const [openAlert, setOpenAlert] = React.useState(false);
   const [colorAlert, setColorAlert] = React.useState("");
+  const [errorUsername, setErrorUsername] = React.useState(false);
   
 
   const history = useNavigate();
@@ -49,17 +50,17 @@ export default function Users_Operations() {
         Services.getAxiosConfig(tokenLocalStorage)
       )
       .then((response) => {
-        if (response.data.status === process.env.REACT_APP_USER_LOAD) {
+        if (response.data.status === 100) {
           setDataForLoad(response.data.data);
           setTotalItems(response.data.data.length);
         }
       })
       .catch((error) => {
-        /*if (
-              error.response.status !== undefined &&
-              error.response.status === 401
-            )*/
-        //this.props.history.push("/login");
+        if (error.response.status === 403) {
+          history("/login");
+
+          setTimeout(() => Services.habilitarBotones("button-Primary"), 1000);
+        }
       });
 
       await axios
@@ -68,17 +69,17 @@ export default function Users_Operations() {
         Services.getAxiosConfig(tokenLocalStorage)
       )
       .then((response) => {
-        if (response.data.status === process.env.REACT_APP_USER_LOAD) {
+        if (response.data.status === 100) {
             setWorkersNames(response.data.data);
           
         }
       })
       .catch((error) => {
-        /*if (
-              error.response.status !== undefined &&
-              error.response.status === 401
-            )*/
-        //this.props.history.push("/login");
+        if (error.response.status === 403) {
+          history("/login");
+
+          setTimeout(() => Services.habilitarBotones("button-Primary"), 1000);
+        }
       });
 
       await axios
@@ -87,17 +88,59 @@ export default function Users_Operations() {
         Services.getAxiosConfig(tokenLocalStorage)
       )
       .then((response) => {
-        if (response.data.status === "600") {
+        if (response.data.status === 600) {
           setRolesNames(response.data.data);
           
         }
       })
       .catch((error) => {
-        /*if (
-              error.response.status !== undefined &&
-              error.response.status === 401
-            )*/
-        //this.props.history.push("/login");
+        if (error.response.status === 403) {
+          history("/login");
+
+         
+        }
+      });
+
+      let hour=7;
+      
+
+      await  axios
+      .get(
+        Services.getAllAuthLogUrlCheckInTimes()+hour,
+       Services.getAxiosConfig(tokenLocalStorage)
+      )
+      .then((response) => {
+        if (response.data.status === 100) {
+          console.log(response.data.data);
+        }
+      })
+      .catch((error) => {
+        if (error.response.status === 403) {
+          history("/login");
+
+          setTimeout(() => Services.habilitarBotones("button-Primary"), 1000);
+        } else if (error.response.status === 404) {
+          setMessageAlert("Dispositivo no encontrado");
+          setOpenAlert(true);
+          setColorAlert("error");
+          console.log("Error 404");
+
+          setTimeout(() => Services.habilitarBotones("button-Primary"), 1000);
+        } else if (error.response.status === 500) {
+          setMessageAlert("Ha ocuurido un error en el servidor");
+          setOpenAlert(true);
+          setColorAlert("error");
+          console.log("Error 404");
+
+          setTimeout(() => Services.habilitarBotones("button-Primary"), 1000);
+        } else {
+          setMessageAlert("Ha ocuurido un error en la conexion");
+          setOpenAlert(true);
+          setColorAlert("error");
+          console.log("Error 404");
+
+          setTimeout(() => Services.habilitarBotones("button-Primary"), 1000);
+        }
       });
   };
 
@@ -142,7 +185,7 @@ export default function Users_Operations() {
         Services.getAxiosConfig(tokenLocalStorage)
       )
       .then((response) => {
-        if (response.data.status === "101") {
+        if (response.data.status === 101) {
           setUser(response.data.data);
           console.log("User created");
           setOpenDialog(false);
@@ -156,11 +199,19 @@ export default function Users_Operations() {
         }
       })
       .catch((error) => {
-        /*if (
-            error.response.status !== undefined &&
-            error.response.status === 401
-          )*/
-        //this.props.history.push("/login");
+        if (error.response.status === 403) {
+          history("/login");
+
+          setTimeout(() => Services.habilitarBotones("button-Primary"), 1000);
+        }
+        else if (error.response.status === 409) {
+          setErrorUsername(true);
+          setMessageAlert("Ocurrió un conflicto al guardar el usuario");
+          setOpenAlert(true);
+         
+          setColorAlert("error");
+          console.log("Error conflict");
+        }
       });
   };
 
@@ -177,7 +228,7 @@ export default function Users_Operations() {
         Services.getAxiosConfig(tokenLocalStorage)
       )
       .then((response) => {
-        if (response.data.status === process.env.REACT_APP_USER_UPDATED) {
+        if (response.data.status === 102) {
           setUser(response.data.data);
           console.log("User edited");
           setOpenDialog(false);
@@ -209,7 +260,7 @@ export default function Users_Operations() {
       )
       .then((response) => {
         if (
-          response.data.status === process.env.REACT_APP_USER_STATUS_CHANGED
+          response.data.status === 103
         ) {
           console.log("User status changed");
           onLoadInfo();
@@ -280,9 +331,9 @@ export default function Users_Operations() {
         }}
       />
       <Users_Dialog
-        open={openDialog}
+        open={openDialog} errorUsername={errorUsername}
         onClose={() => setOpenDialog(false)}
-        title={"Información del trabajador"}
+        title={"Información del usuario"}
         onCloseSaved={operation === 1 ? onHandleSaveData : onHandleEditData}
         listOfInputs={listOfInputs}
         selectedValue={selectedValue} names={workersNames} roles={rolesNames}

@@ -6,6 +6,9 @@ export class Modular_Data {
   _data: number = 0;
 
   constructor(newData: number) {
+    if(newData === 0)
+    this._data = 0;
+    else
     this._data = newData % MODULUS;
   }
 
@@ -17,7 +20,11 @@ export class Modular_Data {
   }
 
   static operator_mult(data1: Modular_Data, data2: Modular_Data): Modular_Data {
-    if (data1 === undefined || data2 === undefined) return new Modular_Data(0);
+    if (data1 === undefined || data2 === undefined) {
+     
+      return new Modular_Data(0);
+    }
+    
     else return new Modular_Data(data1._data * data2._data);
   }
 
@@ -38,6 +45,7 @@ export class Modular_Data {
    
     result._data = d + d1 >= MODULUS ? d + d1 - MODULUS : d + d1;
     return result;
+       
   }
   
   static operator_sub(data1: Modular_Data, data2: Modular_Data): Modular_Data {

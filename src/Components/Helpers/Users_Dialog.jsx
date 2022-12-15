@@ -18,27 +18,48 @@ import FormControl from "@mui/material/FormControl";
 
 const CssTextField = styled(TextField)({
   "& label.Mui-focused": {
-    color: "gray",
+    color: "#2ecc71",
   },
 
   "& .MuiInput-underline:after": {
-    borderBottomColor: "gray",
+    borderBottomColor: "#2ecc71",
   },
   "& .MuiOutlinedInput-root": {
     "& fieldset": {
-      border: "2px solid gray",
+      border: "2px solid #2ecc71",
     },
     "&:hover fieldset": {
-      borderColor: "gray",
+      borderColor: "#2ecc71",
     },
     "&.Mui-focused fieldset": {
-      borderColor: "gray",
+      borderColor: "#2ecc71",
+    },
+  },
+});
+const CssFormControl = styled(FormControl)({
+  "& label.Mui-focused": {
+    color: "#2ecc71",
+  },
+  "& .MuiInput-underline:after": {
+    borderBottomColor: "#2ecc71",
+  },
+  "& .MuiOutlinedInput-root": {
+    "& fieldset": {
+      borderColor: "#2ecc71",
+    },
+    "&:hover fieldset": {
+      borderColor: "#2ecc71",
+    },
+    "&.Mui-focused fieldset": {
+      borderColor: "#2ecc71",
     },
   },
 });
 
+
+
 export default function Users_Dialog(props) {
-  const { onClose, onCloseSaved, roles, names, open, title, selectedValue } =
+  const { onClose, onCloseSaved, roles, names, open, title, selectedValue,errorUsername } =
     props;
 
   const [selectedValueState, setSelectedValueState] =
@@ -85,9 +106,13 @@ export default function Users_Dialog(props) {
 
   return (
     <Dialog open={open} onClose={handleClose}>
-      <DialogTitle>{title}</DialogTitle>
-      <DialogContent>
-        <FormControl className="m-2 mt-4" disabled = {selectedValue.fullname!==null &&
+        <div className="card">
+        <div className="card-header bg-transparent">
+          <h4 style={{ color: "#34434d" }}>{title}</h4>
+        </div>
+        <div className="card-body bg-transparent">
+        <DialogContent>
+        <CssFormControl required className="m-2 mt-4" disabled = {selectedValue.fullname!==null &&
            selectedValue.fullname!==undefined} fullWidth>
           <InputLabel id="demo-simple-select-label">
             Trabajador correspondiente
@@ -104,16 +129,17 @@ export default function Users_Dialog(props) {
               </MenuItem>
             ))}
           </Select>
-        </FormControl>
-        <CssTextField disabled = {selectedValue.fullname!==null &&
+        </CssFormControl>
+        <CssTextField required disabled = {selectedValue.fullname!==null &&
            selectedValue.fullname!==undefined}
-          className="m-2 mt-4"
+          className="m-2 mt-4" helperText="El nombre de usuario debe ser único"
+          error={errorUsername}
           label="Nombre de usuario"
           onChange={(event) => setUsername(event.target.value)}
           value={username}
           fullWidth
         />
-        <FormControl className="m-2 mt-4" fullWidth>
+        <CssFormControl required className="m-2 mt-4" fullWidth>
           <InputLabel id="demo-simple-select-label">Rol del usuario</InputLabel>
           <Select label="Rol del usuario"
              id="demo-simple-select"
@@ -126,9 +152,13 @@ export default function Users_Dialog(props) {
               </MenuItem>
             ))}
           </Select>
-        </FormControl>
+        </CssFormControl>
       </DialogContent>
-      <DialogActions>
+   
+        </div>
+        <div className="card-footer bg-transparent">
+
+        <DialogActions>
         <Button className="button-Secondary" onClick={handleClose}>
           Cancelar
         </Button>
@@ -136,6 +166,9 @@ export default function Users_Dialog(props) {
           Guardar
         </Button>
       </DialogActions>
+   
+        </div>
+        </div>
     </Dialog>
   );
 }

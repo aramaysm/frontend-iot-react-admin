@@ -71,6 +71,10 @@ export default class Services {
       static loginAdminUrl() {
         return apiUrl + "/auth/login/";
       }
+      static getUserAuthUrl() {
+        return apiUrl + "/auth/user";
+      }
+
 
       //Workers
       static getAllWorkersUrl() {
@@ -82,6 +86,8 @@ export default class Services {
       static updateWorkersUrl() {
         return apiUrl + "/user/update/";
       }
+
+      
 
       static changeStatusWorkersUrl(){
         return apiUrl + "/user/status/";
@@ -119,8 +125,28 @@ export default class Services {
       static getAllRolesUrl() {
         return apiUrl + "/role";
       }
+
+      //WorkersLogs
+      static getAllWorkersLogUrl() {
+        return apiUrl + "/worker-log";
+      }
+
+      static getAllWorkersLogUrlCheckInTimes() {
+        return apiUrl + "/worker-log/checkInTimes";
+      }
+
+      //AuthenticactionLogs
+      static getAllAuthLogUrl() {
+        return apiUrl + "/auth";
+      }
+
+      static getAllAuthLogUrlCheckInTimes() {
+        return apiUrl + "/auth/report/checkInHour/";
+      }
 }
 
-
-let apiUrl = "http://127.0.0.1:8080";
+//Hosted
+//let apiUrl = "https://iot-platform-api-nest.onrender.com";
+//Local let apiUrl = "http://localhost:8080";
+let apiUrl = "http://localhost:8080";
 let encripted_Token = '';

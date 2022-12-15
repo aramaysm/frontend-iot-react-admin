@@ -14,7 +14,7 @@ class Square_Hill_Matrix {
     if (matrixNew !== null && matrixNew !== undefined && matrixNew.length > 0) {
       this._matrix = matrixNew.map((item) => new Modular_Data(item));
     } else {
-      this._matrix = new Array<Modular_Data>(orderNew * orderNew);
+      this._matrix = this.InitializeAs(-1,8);
     }
   }
 
@@ -67,6 +67,10 @@ class Square_Hill_Matrix {
     if (order == 0) return new Array<Modular_Data>(0);
 
     switch (mtype) {
+      case -1:
+        for (let i = 0; i < order * order; i++) 
+        matrix[i] = new Modular_Data(0);
+    
       case 0:
         for (let i = 0; i < order * order; i++)
           if (i % (order + 1) != 0) matrix[i] = new Modular_Data(0);
@@ -186,9 +190,9 @@ class Square_Hill_Matrix {
     return result;
   }
 
-  InverseOf(matrix: Square_Hill_Matrix): Square_Hill_Matrix {
-    let luFactors: Square_Hill_Matrix = this.LuFactorizationOf(matrix);
-    let inverse: Square_Hill_Matrix = this.InverseOfWithLU(matrix, luFactors);
+  async InverseOf(matrix: Square_Hill_Matrix): Promise<Square_Hill_Matrix> {
+    let luFactors: Square_Hill_Matrix = await this.LuFactorizationOf(matrix);
+    let inverse: Square_Hill_Matrix = await this.InverseOfWithLU(matrix, luFactors);
 
     return inverse;
   }
@@ -197,8 +201,7 @@ class Square_Hill_Matrix {
     matrix: Square_Hill_Matrix,
     luFactors: Square_Hill_Matrix
   ): Square_Hill_Matrix {
-    let order = matrix._order,
-      index = 0;
+    let order = 8, index = 0;
     let inverse: Square_Hill_Matrix = new Square_Hill_Matrix(order, []);
     inverse._matrix = this.InitializeAs(0, order);
     for (let r = 1; r < order; r++)
@@ -214,6 +217,7 @@ class Square_Hill_Matrix {
           );
       }
     let sum: Modular_Data = new Modular_Data(0);
+    
     for (let c = 0; c < order; c++)
       for (let r = order - 1; r >= 0; r--) {
         index = r * order + c;
@@ -241,7 +245,7 @@ class Square_Hill_Matrix {
       matrix._order,
       []
     );
-    luFactors.set_matrix(matrix._matrix);
+    luFactors._matrix=(matrix._matrix);
 
     let diagValue: Modular_Data = new Modular_Data(0);
     let order = matrix._order;
@@ -288,85 +292,49 @@ class Square_Hill_Matrix {
 
     return product;
   }
-
-  static MultiplyHillMatrices(
+  static async MultiplyHillMatrices(
     matrix1: Square_Hill_Matrix,
     matrix2: Square_Hill_Matrix
-  ): Square_Hill_Matrix {
-    let order = matrix1._order;
-    let sum: Modular_Data = new Modular_Data(0);
+  ): Promise<Square_Hill_Matrix> {
 
-    let product: Square_Hill_Matrix = new Square_Hill_Matrix(order, []);
-    for (let row = 0; row < order; row++)
+    let matrix1_Array = Transform_Data.Get_Array_From_SquareMatrix(matrix1);
+    let matrix2_Array = Transform_Data.Get_Array_From_SquareMatrix(matrix2);
+    let order = 8;
+    let sum: number = 0;
+    
+    let product: Array<number> = new Array<number>(order * order);
+
+    for (let row = 0; row < order; row++){
       for (let col = 0; col < order; col++) {
-        sum = new Modular_Data(0);
+        sum = 0;
         for (let k = 0; k < order; k++)
-          sum = Modular_Data.operator_add(
-            sum,
-            Modular_Data.operator_mult(
-              matrix1._matrix[row * order + k],
-              matrix2._matrix[k * order + col]
-            )
-          );
-        product._matrix[row * order + col] = sum;
+          sum = sum + matrix1_Array[row * order + k] *  matrix2_Array[k * order + col];
+           
+         
+        product[row * order + col] = sum;
       }
+    }
+      
 
-    return product;
+    let result: Square_Hill_Matrix = new Square_Hill_Matrix(order, product);
+   
+
+    return result;
   }
 
-  PowerOf(mat: Square_Hill_Matrix, power: number): Square_Hill_Matrix {
+   async PowerOf(mat: Square_Hill_Matrix, power: number): Promise<Square_Hill_Matrix> {
     let matPower: Square_Hill_Matrix = new Square_Hill_Matrix(8, []);
     matPower._matrix = mat._matrix;
 
     if (power != 0) {
       for (let i = 0; i < Math.abs(power) - 1; i++)
-        matPower = Square_Hill_Matrix.MultiplyHillMatrices(matPower, mat);
-      if (power < 0) matPower = this.InverseOf(matPower);
+        matPower =  await Square_Hill_Matrix.MultiplyHillMatrices(matPower, mat);
+      if (power < 0) matPower = await  this.InverseOf(matPower);
     } else matPower._matrix = this.InitializeAs(0, mat._order);
     return matPower;
   }
 
-  PowerOfValueByValue(
-    mat: Square_Hill_Matrix,
-    power: number
-  ): Square_Hill_Matrix {
-    let matPower: Square_Hill_Matrix = new Square_Hill_Matrix(mat._order, []);
-    matPower.set_matrix(mat._matrix);
-
-    for (let i = 0; i < 64; i++)
-      matPower._matrix[i] = Modular_Data.PowerOf(mat._matrix[i], power);
-
-    if (power < 0) matPower = this.InverseOf(matPower);
-
-    return matPower;
-  }
-
-  static TwoPowerOf(
-    power1: number,
-    power2: number,
-    matrix: Square_Hill_Matrix
-  ): any {
-
-    let matricesToReturn = {};
-    let menorPower=0;
-
-    let matPowerMenor: Square_Hill_Matrix = new Square_Hill_Matrix(8, []);
-    let matPowerMayor: Square_Hill_Matrix = new Square_Hill_Matrix(8, []);
-
-    menorPower = Math.min(power1, power2);
-    matPowerMenor = matrix.PowerOf(matrix, menorPower);
-    matPowerMayor = Square_Hill_Matrix.MultiplyHillMatrices(matPowerMenor,matrix.PowerOf(matrix, Math.abs(power1-power2))) ;
-
-    matricesToReturn = [
-      { power: menorPower,
-        matrixPower: matPowerMenor
-     },
-     {power: menorPower + Math.abs(power1-power2),
-      matrixPower: matPowerMayor}
-    ]
-    
-    return matricesToReturn;
-  }
+  
 }
 
 /*let hill_v = new Square_Hill_Matrix(2, [1547, 5478, 8746, 4578]);
@@ -396,6 +364,7 @@ console.table(squareResult._matrix);
 
 export default Square_Hill_Matrix;
 
+/*
 let square1: Square_Hill_Matrix = new Square_Hill_Matrix(
   8,
   [

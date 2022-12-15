@@ -1,385 +1,252 @@
 "use strict";
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
+var __generator = (this && this.__generator) || function (thisArg, body) {
+    var _ = { label: 0, sent: function() { if (t[0] & 1) throw t[1]; return t[1]; }, trys: [], ops: [] }, f, y, t, g;
+    return g = { next: verb(0), "throw": verb(1), "return": verb(2) }, typeof Symbol === "function" && (g[Symbol.iterator] = function() { return this; }), g;
+    function verb(n) { return function (v) { return step([n, v]); }; }
+    function step(op) {
+        if (f) throw new TypeError("Generator is already executing.");
+        while (_) try {
+            if (f = 1, y && (t = op[0] & 2 ? y["return"] : op[0] ? y["throw"] || ((t = y["return"]) && t.call(y), 0) : y.next) && !(t = t.call(y, op[1])).done) return t;
+            if (y = 0, t) op = [op[0] & 2, t.value];
+            switch (op[0]) {
+                case 0: case 1: t = op; break;
+                case 4: _.label++; return { value: op[1], done: false };
+                case 5: _.label++; y = op[1]; op = [0]; continue;
+                case 7: op = _.ops.pop(); _.trys.pop(); continue;
+                default:
+                    if (!(t = _.trys, t = t.length > 0 && t[t.length - 1]) && (op[0] === 6 || op[0] === 2)) { _ = 0; continue; }
+                    if (op[0] === 3 && (!t || (op[1] > t[0] && op[1] < t[3]))) { _.label = op[1]; break; }
+                    if (op[0] === 6 && _.label < t[1]) { _.label = t[1]; t = op; break; }
+                    if (t && _.label < t[2]) { _.label = t[2]; _.ops.push(op); break; }
+                    if (t[2]) _.ops.pop();
+                    _.trys.pop(); continue;
+            }
+            op = body.call(thisArg, _);
+        } catch (e) { op = [6, e]; y = 0; } finally { f = t = 0; }
+        if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
+    }
+};
 exports.__esModule = true;
-var Modular_Data_1 = require("./Math_Classes/Modular_Data");
 var Square_Hill_Matrix_1 = require("./Math_Classes/Square_Hill_Matrix");
 var Random_Generator_1 = require("./Math_Classes/Random_Generator");
 var Elementary_Matrix_1 = require("./Math_Classes/Elementary_Matrix");
 var Diagonal_Hill_Matrix_1 = require("./Math_Classes/Diagonal_Hill_Matrix");
 var Transform_Data_1 = require("./Utils_Classes/Transform_Data");
 var MATRIXORDER = 8;
-var Z_BOUND = 33;
+var Z_BOUND = 20;
 var Client_Entity = /** @class */ (function () {
     function Client_Entity(url_Server, password, username) {
-        this._diagMat = new Diagonal_Hill_Matrix_1["default"](0, []);
-        this._eigVectMat = new Elementary_Matrix_1["default"](0);
-        this._invEigVectMat = new Square_Hill_Matrix_1["default"](0, []);
-        this._bValue = 0;
-        this._kValue = 0;
-        this._mValue = 0;
-        this._nValue = 0;
-        this._privateKey = new Square_Hill_Matrix_1["default"](0, []);
-        this._pubKeyBaseMatA = new Square_Hill_Matrix_1["default"](0, []);
-        this._pubKeyMat = new Square_Hill_Matrix_1["default"](0, []);
-        this._otherPubKeyMat = new Square_Hill_Matrix_1["default"](0, []);
-        this._pubKeyBaseCommon = new Square_Hill_Matrix_1["default"](0, []);
-        this._privKeyExp_m = new Square_Hill_Matrix_1["default"](0, []);
-        this._privKeyExp_n = new Square_Hill_Matrix_1["default"](0, []);
-        this._witnessExp_m = new Square_Hill_Matrix_1["default"](0, []);
-        this._witnessExp_n = new Square_Hill_Matrix_1["default"](0, []);
-        this._challenge = new Square_Hill_Matrix_1["default"](0, []);
-        this._challenge_response = new Square_Hill_Matrix_1["default"](0, []);
-        this._witness = new Square_Hill_Matrix_1["default"](0, []);
+        this._diagMat = new Diagonal_Hill_Matrix_1["default"](8, []);
+        this._eigVectMat = new Elementary_Matrix_1["default"](8);
+        this._invEigVectMat = new Square_Hill_Matrix_1["default"](8, []);
+        this._privateKey = new Square_Hill_Matrix_1["default"](8, []);
+        this._pubKeyBaseMatA = new Square_Hill_Matrix_1["default"](8, []);
+        this._pubKeyMat = new Square_Hill_Matrix_1["default"](8, []);
+        this._otherPubKeyMat = new Square_Hill_Matrix_1["default"](8, []);
+        this._pubKeyBaseCommon = new Square_Hill_Matrix_1["default"](8, []);
+        this._challenge = new Square_Hill_Matrix_1["default"](8, []);
+        this._challenge_response = new Square_Hill_Matrix_1["default"](8, []);
+        this._witness = new Square_Hill_Matrix_1["default"](8, []);
     }
     Client_Entity.prototype.phase_0 = function (info, pass) {
-        /*
-        this._diagMat = this.encryptPassword(pass); //DA
-        this._eigVectMat = Transform_Data.Get_ElementaryMatrix_From_Array(
-          info["P"]
-        ); //matrix P
-        this._mValue = info["m"]; //m value
-        this._nValue = info["n"]; //n value
-        this._pubKeyBaseMat = Transform_Data.Get_ElementaryMatrix_From_Array(
-          info["G"]
-        ); //matrix G
-        this._otherPubKeyMat = Transform_Data.Get_SquareMatrix_From_Array(
-          info["GB"]
-        ); //matrix GB
-        //this._diagB = Transform_Data.Get_DiagonalMatrix_From_Array(info["D"]);
-    
-        this.CreatePublicKeyMatrix(
-          this._eigVectMat,
-          Diagonal_Hill_Matrix.PowerOf(this._diagMat, this._mValue),
-          Diagonal_Hill_Matrix.PowerOf(this._diagMat, this._nValue),
-          this._pubKeyBaseMat
-        ); //GA
-         
-        return this.phase_1(info);*/
-        var _this = this;
-        this.CreateEigenValuesMatrixFor(); //DB
-        this._eigVectMat = Transform_Data_1["default"].Get_ElementaryMatrix_From_Array(info["P"]); //matrix P
-        this._mValue = info["m"]; //m value
-        this._nValue = info["n"]; //n value
-        this._pubKeyBaseCommon = Transform_Data_1["default"].Get_SquareMatrix_From_Array(info["G"]);
-        this._otherPubKeyMat = Transform_Data_1["default"].Get_SquareMatrix_From_Array(info["GB"]);
-        /****Matriz F-representa la contraseña del usuario recibido en codigo ASCI */
-        var squareF = new Square_Hill_Matrix_1["default"](8, Transform_Data_1["default"].getAsciFromString(pass));
-        /***Calculo de Gb=E^m*G*E^n   ***/
-        var complementary_Base_Matrix1 = new Square_Hill_Matrix_1["default"](8, []);
-        complementary_Base_Matrix1 = Square_Hill_Matrix_1["default"].MultiplyHillMatrices(squareF.PowerOf(squareF, this._mValue), this._pubKeyBaseCommon);
-        this._pubKeyBaseMatA = Square_Hill_Matrix_1["default"].MultiplyHillMatrices(complementary_Base_Matrix1, squareF.PowerOf(squareF, this._nValue));
-        this._privateKey = this.Create_PrivateKey(this._diagMat);
-        var expPrivKeys = Square_Hill_Matrix_1["default"].TwoPowerOf(this._mValue, this._nValue, this._privateKey);
-        var founded = expPrivKeys.find(function (x) { return x.power === _this._mValue; });
-        if (founded)
-            this._privKeyExp_m = founded.matrixPower;
-        console.log("First founded: ", founded);
-        var founded1 = expPrivKeys.find(function (x) { return x.power === _this._nValue; });
-        if (founded)
-            this._privKeyExp_n = founded1.matrixPower;
-        this._pubKeyMat = this.CreatePublicKeyMatrix(this._pubKeyBaseMatA);
-        return this.phase_1("");
+        return __awaiter(this, void 0, void 0, function () {
+            var squareF, complementary_Base_Matrix1, _a, _b, _c, _d, _e, _f, _g, _h;
+            return __generator(this, function (_j) {
+                switch (_j.label) {
+                    case 0:
+                        this.CreateEigenValuesMatrixFor(); //DA
+                        this._eigVectMat = Transform_Data_1["default"].Get_ElementaryMatrix_From_Array(info["P"]); //matrix P
+                        this._invEigVectMat = Transform_Data_1["default"].Get_SquareMatrix_From_Array(info["P_Inv"]);
+                        this._mValue = info["m"]; //m value
+                        this._nValue = info["n"]; //n value
+                        this._pubKeyBaseCommon = Transform_Data_1["default"].Get_SquareMatrix_From_Array(info["G"]);
+                        this._otherPubKeyMat = Transform_Data_1["default"].Get_SquareMatrix_From_Array(info["GB"]);
+                        squareF = new Square_Hill_Matrix_1["default"](8, Transform_Data_1["default"].getAsciFromString(pass));
+                        complementary_Base_Matrix1 = new Square_Hill_Matrix_1["default"](8, []);
+                        _b = (_a = Square_Hill_Matrix_1["default"]).MultiplyHillMatrices;
+                        return [4 /*yield*/, squareF.PowerOf(squareF, this._mValue)];
+                    case 1: return [4 /*yield*/, _b.apply(_a, [_j.sent(), this._pubKeyBaseCommon])];
+                    case 2:
+                        complementary_Base_Matrix1 = _j.sent();
+                        _c = this;
+                        _e = (_d = Square_Hill_Matrix_1["default"]).MultiplyHillMatrices;
+                        _f = [complementary_Base_Matrix1];
+                        return [4 /*yield*/, squareF.PowerOf(squareF, this._nValue)];
+                    case 3: return [4 /*yield*/, _e.apply(_d, _f.concat([_j.sent()]))];
+                    case 4:
+                        _c._pubKeyBaseMatA = _j.sent();
+                        _g = this;
+                        return [4 /*yield*/, this.Create_PrivateKey(this._diagMat)];
+                    case 5:
+                        _g._privateKey = _j.sent();
+                        _h = this;
+                        return [4 /*yield*/, this.CreatePublicKeyMatrix(this._pubKeyBaseMatA)];
+                    case 6:
+                        _h._pubKeyMat = _j.sent();
+                        return [2 /*return*/];
+                }
+            });
+        });
     };
-    Client_Entity.prototype.phase_1 = function (info) {
-        var _this = this;
-        var matrix_S = new Square_Hill_Matrix_1["default"](MATRIXORDER, []);
-        var matrix_S_1 = new Square_Hill_Matrix_1["default"](MATRIXORDER, []); //P*Dk
-        var matrix_S_2 = new Square_Hill_Matrix_1["default"](MATRIXORDER, []); //P-1*Gb
-        this.InitializeKFor();
-        matrix_S_1 = Square_Hill_Matrix_1["default"].MultiplyHillMatrices(this._privateKey.PowerOf(this._privateKey, this._kValue), this._otherPubKeyMat);
-        matrix_S_2 = Square_Hill_Matrix_1["default"].MultiplyHillMatrices(matrix_S_1, this._privKeyExp_m.InverseOf(this._privKeyExp_m));
-        //matrix_S = Square_Hill_Matrix.MultiplyHillMatrices(matrix_S_4, matrix_S_5);
-        this._witness = matrix_S_2;
-        var expWitness = Square_Hill_Matrix_1["default"].TwoPowerOf(this._mValue, this._nValue, this._witness);
-        var founded = expWitness.find(function (x) { return x.power === _this._mValue; });
-        if (founded)
-            this._witnessExp_m = founded.matrixPower;
-        var founded1 = expWitness.find(function (x) { return x.power === _this._nValue; });
-        if (founded1)
-            this._witnessExp_n = founded1.matrixPower;
-        console.log("Witness is: ", Transform_Data_1["default"].Get_Array_From_SquareMatrix(matrix_S_2));
-        var everything_ok = false;
-        return {
-            GA: Transform_Data_1["default"].Get_Array_From_SquareMatrix(this._pubKeyMat),
-            witness: Transform_Data_1["default"].Get_Array_From_SquareMatrix(matrix_S_2)
-        };
+    Client_Entity.prototype.phase_1 = function () {
+        return __awaiter(this, void 0, void 0, function () {
+            var matrix_S_1, matrix_S_2, powerOf_k_PrivateKey, powerOf_m_privateKey_Inverse, everything_ok;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        this._witness = new Square_Hill_Matrix_1["default"](8, []);
+                        this._challenge = new Square_Hill_Matrix_1["default"](8, []);
+                        this._challenge_response = new Square_Hill_Matrix_1["default"](8, []);
+                        matrix_S_1 = new Square_Hill_Matrix_1["default"](MATRIXORDER, []);
+                        matrix_S_2 = new Square_Hill_Matrix_1["default"](MATRIXORDER, []);
+                        this.InitializeKFor();
+                        console.log("K value :", this._kValue);
+                        return [4 /*yield*/, this._privateKey.PowerOf(this._privateKey, this._kValue)];
+                    case 1:
+                        powerOf_k_PrivateKey = _a.sent();
+                        return [4 /*yield*/, this._privateKey.PowerOf(this._privateKey, -1 * this._mValue)];
+                    case 2:
+                        powerOf_m_privateKey_Inverse = _a.sent();
+                        return [4 /*yield*/, Square_Hill_Matrix_1["default"].MultiplyHillMatrices(powerOf_k_PrivateKey, this._otherPubKeyMat)];
+                    case 3:
+                        matrix_S_1 = _a.sent();
+                        return [4 /*yield*/, Square_Hill_Matrix_1["default"].MultiplyHillMatrices(matrix_S_1, powerOf_m_privateKey_Inverse)];
+                    case 4:
+                        matrix_S_2 = _a.sent();
+                        //matrix_S = await Square_Hill_Matrix.MultiplyHillMatrices(matrix_S_4, matrix_S_5);
+                        this._witness = matrix_S_2;
+                        everything_ok = false;
+                        return [2 /*return*/, {
+                                GA: Transform_Data_1["default"].Get_Array_From_SquareMatrix(this._pubKeyMat),
+                                witness: Transform_Data_1["default"].Get_Array_From_SquareMatrix(matrix_S_2)
+                            }];
+                }
+            });
+        });
     };
     Client_Entity.prototype.phase_2 = function (info) {
         this._bValue = info["b"];
-        this._challenge = Transform_Data_1["default"].Get_SquareMatrix_From_Array(info["q_matrix"]);
+        this._challenge = Transform_Data_1["default"].Get_SquareMatrix_From_Array(info["challenge"]);
+        console.log("Challenge", Transform_Data_1["default"].Get_Array_From_SquareMatrix(this._challenge));
         return this.phase_3();
     };
     Client_Entity.prototype.phase_3 = function () {
-        var matrix_R = new Square_Hill_Matrix_1["default"](MATRIXORDER, []);
-        var matrix_R_1 = new Square_Hill_Matrix_1["default"](MATRIXORDER, []);
-        var matrix_R_2 = new Square_Hill_Matrix_1["default"](MATRIXORDER, []);
-        if (this._bValue === 0) {
-            matrix_R_1 = Square_Hill_Matrix_1["default"].MultiplyHillMatrices(this._witnessExp_m.InverseOf(this._witnessExp_m), this._challenge);
-            matrix_R_2 = Square_Hill_Matrix_1["default"].MultiplyHillMatrices(matrix_R_1, this._witnessExp_m.InverseOf(this._witnessExp_n));
-            /*matrix_R = Square_Hill_Matrix.MultiplyHillMatrices(
-              matrix_R_2,
-              this._pubKeyBaseMatA
-            );*/
-            matrix_R = matrix_R_2;
-        }
-        else if (this._bValue === 1) {
-            // R = A^-k * Q * A^-n
-            // R = P Da^-k P^-1 * Q * P Da^-n P^-1
-            var matrix_R_3 = new Square_Hill_Matrix_1["default"](MATRIXORDER, []);
-            matrix_R_1 = Square_Hill_Matrix_1["default"].MultiplyHillMatrices(this._privateKey.PowerOf(this._privateKey, -1 * this._kValue), this._challenge); //P Da^-k
-            matrix_R_2 = Square_Hill_Matrix_1["default"].MultiplyHillMatrices(matrix_R_1, this._privKeyExp_n.InverseOf(this._privKeyExp_n)); //P^-1 Q
-            matrix_R = matrix_R_2; //R_4 * R_5
-        }
-        this._challenge_response = matrix_R;
-        return {
-            R: Transform_Data_1["default"].Get_Array_From_SquareMatrix(this._challenge_response),
-            Ga: Transform_Data_1["default"].Get_Array_From_SquareMatrix(this._pubKeyBaseMatA)
-        };
-        /*this.Send_Results(
-          {
-            P: Transform_Data.Get_Array_From_ElementaryMatrix(this._eigVectMat),
-            m: this._mValue,
-            n: this._nValue,
-            G: Transform_Data.Get_Array_From_ElementaryMatrix(this._pubKeyBaseMat),
-            GB: Transform_Data.Get_Array_From_SquareMatrix(this._otherPubKeyMat),
-            D: Transform_Data.Get_Array_From_DiagonalMatrix(this._diagB),
-            R: Transform_Data.Get_Array_From_SquareMatrix(matrix_R),
-            GA: Transform_Data.Get_Array_From_SquareMatrix(this._pubKeyMat),
-            witness: Transform_Data.Get_Array_From_SquareMatrix(this._witness),
-          },
-          3
-        )
-          .then((response) => {
-            everything_ok = this.phase_4(response);
-          })
-          .catch((error) => {});
-    */
+        return __awaiter(this, void 0, void 0, function () {
+            var matrix_R, matrix_R_1, matrix_R_2, witness_PowerOf_m_inverse, witness_PowerOf_n_inverse, _a, privateKey_to_k_inverse, privateKey_to_n_inverse, _b;
+            return __generator(this, function (_c) {
+                switch (_c.label) {
+                    case 0:
+                        matrix_R = new Square_Hill_Matrix_1["default"](MATRIXORDER, []);
+                        matrix_R_1 = new Square_Hill_Matrix_1["default"](MATRIXORDER, []);
+                        matrix_R_2 = new Square_Hill_Matrix_1["default"](MATRIXORDER, []);
+                        if (!(this._bValue === 0)) return [3 /*break*/, 5];
+                        return [4 /*yield*/, this._witness.PowerOf(this._witness, -1 * this._mValue)];
+                    case 1:
+                        witness_PowerOf_m_inverse = _c.sent();
+                        return [4 /*yield*/, this._witness.PowerOf(this._witness, -1 * this._nValue)];
+                    case 2:
+                        witness_PowerOf_n_inverse = _c.sent();
+                        return [4 /*yield*/, Square_Hill_Matrix_1["default"].MultiplyHillMatrices(witness_PowerOf_m_inverse, this._challenge)];
+                    case 3:
+                        matrix_R_1 = _c.sent();
+                        _a = this;
+                        return [4 /*yield*/, Square_Hill_Matrix_1["default"].MultiplyHillMatrices(matrix_R_1, witness_PowerOf_n_inverse)];
+                    case 4:
+                        _a._challenge_response = _c.sent();
+                        return [3 /*break*/, 10];
+                    case 5:
+                        if (!(this._bValue === 1)) return [3 /*break*/, 10];
+                        return [4 /*yield*/, this._privateKey.PowerOf(this._privateKey, -1 * this._kValue)];
+                    case 6:
+                        privateKey_to_k_inverse = _c.sent();
+                        return [4 /*yield*/, this._privateKey.PowerOf(this._privateKey, -1 * this._nValue)];
+                    case 7:
+                        privateKey_to_n_inverse = _c.sent();
+                        return [4 /*yield*/, Square_Hill_Matrix_1["default"].MultiplyHillMatrices(privateKey_to_k_inverse, this._challenge)];
+                    case 8:
+                        matrix_R_1 = _c.sent(); //P Da^-k
+                        _b = this;
+                        return [4 /*yield*/, Square_Hill_Matrix_1["default"].MultiplyHillMatrices(matrix_R_1, privateKey_to_n_inverse)];
+                    case 9:
+                        _b._challenge_response = _c.sent(); //P^-1 Q
+                        _c.label = 10;
+                    case 10:
+                        console.log("Challenge response: ", Transform_Data_1["default"].Get_Array_From_SquareMatrix(this._challenge_response));
+                        return [2 /*return*/, {
+                                R: Transform_Data_1["default"].Get_Array_From_SquareMatrix(this._challenge_response),
+                                Ga: Transform_Data_1["default"].Get_Array_From_SquareMatrix(this._pubKeyBaseMatA)
+                            }];
+                }
+            });
+        });
     };
-    Client_Entity.prototype.phase_4 = function (info) {
-        if (info["data"]["validated_credentials"] === true) {
-            if (info["data"]["finished"] === false) {
-                this.phase_1("");
-                return false;
-            }
-            else {
-                return true;
-            }
-        }
-        else {
-            throw new Error("Credentials are not validated");
-        }
-    };
-    Client_Entity.prototype.phase_4_adapted = function (matrixdiagB, matrix_complementary) { };
     Client_Entity.prototype.InitializeKFor = function () {
         this._kValue = Random_Generator_1.Random_Generator.RandomValueLessThan(Z_BOUND);
         while (this._kValue < 2 ||
             this._kValue == this._mValue ||
-            this._kValue == this._nValue)
+            this._kValue == this._nValue || (this._kValue % 2 == 1 && this._kValue > 10))
             this._kValue = Random_Generator_1.Random_Generator.RandomValueLessThan(Z_BOUND);
     };
     Client_Entity.prototype.InvertEigenVectorsMatrixOf = function () {
         this._invEigVectMat = Elementary_Matrix_1["default"].InverseOf(this._eigVectMat);
-        console.log("Inverse is : ", Transform_Data_1["default"].Get_Array_From_SquareMatrix(this._invEigVectMat));
     };
     Client_Entity.prototype.CreatePublicKeyMatrix = function (G) {
-        // GA = A^m*G*A^n = P*D^m*P^(-1)*G*P*D^n*P(-1).      // Total: 22n*n + 20n + 7.
-        /*
-        let order = P._order;
-        let k: Modular_Data = P._factorForInverse;
-        let u: Array<Modular_Data> = P._vector1._vector;
-        let vT: Array<Modular_Data> = P._vector2._vector;
-        let r: Array<Modular_Data> = G._vector1._vector;
-        let sT: Array<Modular_Data> = G._vector2._vector;
-    
-        let P1: Elementary_Matrix = new Elementary_Matrix(order);
-        let o: Array<Modular_Data> = P1._vector1._vector;
-        let pT: Array<Modular_Data> = P1._vector2._vector;
-    
-        // a = sTu; b = vTr
-        let a: Modular_Data = new Modular_Data(0);
-        let b: Modular_Data = new Modular_Data(0);
-    
-        // cT = vTD^m; d = kD^nu; e = cTd; fT = cTD^n;
-        // g = cTx; h = yTd; iT = yTD^n; j = D^md; l = D^mx
-    
-        let cT: Array<Modular_Data> = new Array<Modular_Data>(order);
-        let d: Array<Modular_Data> = new Array<Modular_Data>(order);
-        let fT: Array<Modular_Data> = new Array<Modular_Data>(order);
-        let iT: Array<Modular_Data> = new Array<Modular_Data>(order);
-        let j: Array<Modular_Data> = new Array<Modular_Data>(order);
-        let l: Array<Modular_Data> = new Array<Modular_Data>(order);
-    
-        let e: Modular_Data = new Modular_Data(0);
-        let g: Modular_Data = new Modular_Data(0);
-        let h: Modular_Data = new Modular_Data(0);
-        let s: Modular_Data = new Modular_Data(0);
-    
-        let lIdx: number = 0;
-        let PubKey: Square_Hill_Matrix = new Square_Hill_Matrix(order, []);
-        let pkData: Array<Modular_Data> = PubKey._matrix;
-    
-        for (let idx = 0; idx < order * order; idx++)
-          pkData[idx] = new Modular_Data(0);
-    
-        let DmData: Array<Modular_Data> = DmMat._matrix;
-        let DnData: Array<Modular_Data> = DnMat._matrix;
-    
-        for (let idx = 0; idx < order; idx++) {
-          a = Modular_Data.operator_add(
-            a,
-            Modular_Data.operator_mult(sT[idx], u[idx])
-          );
-          b = Modular_Data.operator_add(
-            b,
-            Modular_Data.operator_mult(vT[idx], r[idx])
-          );
-    
-          cT[idx] = Modular_Data.operator_mult(vT[idx], DmData[idx]);
-          d[idx] = Modular_Data.operator_mult(
-            k,
-            Modular_Data.operator_mult(DnData[idx], u[idx])
-          );
-    
-          e = Modular_Data.operator_add(
-            e,
-            Modular_Data.operator_mult(cT[idx], d[idx])
-          );
-          fT[idx] = Modular_Data.operator_mult(cT[idx], DnData[idx]);
-        }
-        let kb: Modular_Data = Modular_Data.operator_mult(k, b);
-    
-        for (let idx = 0; idx < order; idx++) {
-          o[idx] = Modular_Data.operator_sub(
-            r[idx],
-            Modular_Data.operator_mult(kb, u[idx])
-          );
-          pT[idx] = Modular_Data.operator_sub(
-            sT[idx],
-            Modular_Data.operator_mult(a, vT[idx])
-          );
-    
-          s = Modular_Data.operator_add(
-            s,
-            Modular_Data.operator_mult(o[idx], pT[idx])
-          );
-          e = Modular_Data.operator_add(
-            e,
-            Modular_Data.operator_mult(cT[idx], d[idx])
-          );
-          g = Modular_Data.operator_add(
-            g,
-            Modular_Data.operator_mult(cT[idx], o[idx])
-          );
-          h = Modular_Data.operator_add(
-            h,
-            Modular_Data.operator_mult(pT[idx], d[idx])
-          );
-          iT[idx] = Modular_Data.operator_add(
-            iT[idx],
-            Modular_Data.operator_mult(pT[idx], DnData[idx])
-          );
-          j[idx] = Modular_Data.operator_add(
-            j[idx],
-            Modular_Data.operator_mult(DmData[idx], d[idx])
-          );
-    
-          l[idx] = Modular_Data.operator_add(
-            l[idx],
-            Modular_Data.operator_mult(DmData[idx], o[idx])
-          );
-        }
-        P1._factorForInverse = Modular_Data.operator_inverseOf(
-          Modular_Data.operator_sub_value(s, 1)
-        );
-        //P1->_initialized = true;
-    
-        // u2 = gu - l; v1T = evT - fT; v2T = iT - hvT
-    
-        let u2: Array<Modular_Data> = new Array<Modular_Data>(order);
-        let v1T: Array<Modular_Data> = new Array<Modular_Data>(order);
-        let v2T: Array<Modular_Data> = new Array<Modular_Data>(order);
-    
-        let u1v1T: Modular_Data = new Modular_Data(0);
-        let u2v2T: Modular_Data = new Modular_Data(0);
-        let u3v3T: Modular_Data = new Modular_Data(0);
-    
-        for (let idx = 0; idx < order; idx++) {
-          v1T[idx] = Modular_Data.operator_sub(
-            Modular_Data.operator_mult(e, vT[idx]),
-            fT[idx]
-          );
-          v2T[idx] = Modular_Data.operator_sub(
-            iT[idx],
-            Modular_Data.operator_mult(h, vT[idx])
-          );
-        }
-        lIdx = 0;
-    
-        for (let rIdx = 0; rIdx < order; rIdx++) {
-          pkData[rIdx * order + rIdx] = Modular_Data.operator_mult(
-            DmData[rIdx],
-            DnData[rIdx]
-          );
-          u2[rIdx] = Modular_Data.operator_sub(
-            Modular_Data.operator_mult(g, u[rIdx]),
-            l[rIdx]
-          );
-    
-          for (let cIdx = 0; cIdx < order; cIdx++) {
-            u1v1T = Modular_Data.operator_mult(u[rIdx], v1T[cIdx]);
-            u2v2T = Modular_Data.operator_mult(u2[rIdx], v2T[cIdx]);
-            u3v3T = Modular_Data.operator_mult(j[rIdx], vT[cIdx]);
-    
-            pkData[lIdx] = Modular_Data.operator_add(
-              pkData[lIdx],
-              Modular_Data.operator_add(
-                u1v1T,
-                Modular_Data.operator_sub(u2v2T, u3v3T)
-              )
-            );
-            lIdx++;
-          }
-        }
-        PubKey._matrix = pkData;
-        */
-        var PubKey = new Square_Hill_Matrix_1["default"](8, []);
-        var matrix_P_1 = new Square_Hill_Matrix_1["default"](MATRIXORDER, []); //P*Dk
-        var matrix_P_2 = new Square_Hill_Matrix_1["default"](MATRIXORDER, []); //P-1*Gb
-        var matrix_P_3 = new Square_Hill_Matrix_1["default"](MATRIXORDER, []); //P*D-m
-        matrix_P_1 = Square_Hill_Matrix_1["default"].MultiplyHillMatrices(this._privKeyExp_m, G);
-        matrix_P_2 = Square_Hill_Matrix_1["default"].MultiplyHillMatrices(matrix_P_1, this._privKeyExp_n);
-        PubKey = matrix_P_2;
-        return PubKey;
-    };
-    Client_Entity.prototype.InitializeBFor = function () {
-        //return 0;
-        return Random_Generator_1.Random_Generator.RandomValue() % 2;
+        return __awaiter(this, void 0, void 0, function () {
+            var PubKey, matrix_P_1, matrix_P_2, matrix_P_3, _a, _b, _c, _d, _e;
+            return __generator(this, function (_f) {
+                switch (_f.label) {
+                    case 0:
+                        PubKey = new Square_Hill_Matrix_1["default"](8, []);
+                        matrix_P_1 = new Square_Hill_Matrix_1["default"](MATRIXORDER, []);
+                        matrix_P_2 = new Square_Hill_Matrix_1["default"](MATRIXORDER, []);
+                        matrix_P_3 = new Square_Hill_Matrix_1["default"](MATRIXORDER, []);
+                        _b = (_a = Square_Hill_Matrix_1["default"]).MultiplyHillMatrices;
+                        return [4 /*yield*/, this._privateKey.PowerOf(this._privateKey, this._mValue)];
+                    case 1: return [4 /*yield*/, _b.apply(_a, [_f.sent(), G])];
+                    case 2:
+                        matrix_P_1 = _f.sent();
+                        _d = (_c = Square_Hill_Matrix_1["default"]).MultiplyHillMatrices;
+                        _e = [matrix_P_1];
+                        return [4 /*yield*/, this._privateKey.PowerOf(this._privateKey, this._nValue)];
+                    case 3: return [4 /*yield*/, _d.apply(_c, _e.concat([_f.sent()]))];
+                    case 4:
+                        matrix_P_2 = _f.sent();
+                        PubKey = matrix_P_2;
+                        return [2 /*return*/, PubKey];
+                }
+            });
+        });
     };
     Client_Entity.prototype.Create_PrivateKey = function (diagMatrix) {
-        var privKey = new Square_Hill_Matrix_1["default"](8, []);
-        var priv_1 = new Square_Hill_Matrix_1["default"](8, []);
-        var priv_2 = new Square_Hill_Matrix_1["default"](8, []);
-        this.InvertEigenVectorsMatrixOf();
-        priv_1 = Square_Hill_Matrix_1["default"].MultiplyHillMatrices(Elementary_Matrix_1["default"].ToSquare_Hill_Matrix(this._eigVectMat), diagMatrix.ToSquareHillMatrix(diagMatrix));
-        priv_2 = Square_Hill_Matrix_1["default"].MultiplyHillMatrices(priv_1, this._invEigVectMat);
-        privKey = priv_2;
-        console.log("Private key: ", Transform_Data_1["default"].Get_Array_From_SquareMatrix(privKey));
-        return privKey;
-    };
-    Client_Entity.prototype.encryptPassword = function (password) {
-        ///Cipher Text initially empty
-        var a = Random_Generator_1.Random_Generator.RandomValue();
-        var b = Random_Generator_1.Random_Generator.RandomValue();
-        var i = 0;
-        console.log("In client: ", "a:", a, ",b:", b);
-        var diagMatrix = new Diagonal_Hill_Matrix_1["default"](MATRIXORDER, []);
-        for (i = 0; i < password.length; i++) {
-            if (password[i] != " ")
-                diagMatrix._matrix[i] = new Modular_Data_1.Modular_Data(a * password.charCodeAt(i) + b);
-        }
-        diagMatrix._matrix[i] = new Modular_Data_1.Modular_Data(a);
-        diagMatrix._matrix[i + 1] = new Modular_Data_1.Modular_Data(b);
-        //console.log("Matrix generated: ", diagMatrix._matrix);
-        return diagMatrix;
+        return __awaiter(this, void 0, void 0, function () {
+            var privKey, priv_1, priv_2;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        privKey = new Square_Hill_Matrix_1["default"](8, []);
+                        priv_1 = new Square_Hill_Matrix_1["default"](8, []);
+                        priv_2 = new Square_Hill_Matrix_1["default"](8, []);
+                        return [4 /*yield*/, Square_Hill_Matrix_1["default"].MultiplyHillMatrices(Elementary_Matrix_1["default"].ToSquare_Hill_Matrix(this._eigVectMat), diagMatrix.ToSquareHillMatrix(diagMatrix))];
+                    case 1:
+                        priv_1 = _a.sent();
+                        return [4 /*yield*/, Square_Hill_Matrix_1["default"].MultiplyHillMatrices(priv_1, this._invEigVectMat)];
+                    case 2:
+                        priv_2 = _a.sent();
+                        privKey = priv_2;
+                        console.log("Private key: ", Transform_Data_1["default"].Get_Array_From_SquareMatrix(privKey));
+                        return [2 /*return*/, privKey];
+                }
+            });
+        });
     };
     Client_Entity.prototype.CreateEigenValuesMatrixFor = function () {
         this._diagMat = new Diagonal_Hill_Matrix_1["default"](MATRIXORDER, []);

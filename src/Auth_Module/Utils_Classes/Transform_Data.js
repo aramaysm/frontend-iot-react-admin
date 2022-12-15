@@ -17,10 +17,9 @@ var Transform_Data = /** @class */ (function () {
         return array_To_Return;
     };
     Transform_Data.Get_SquareMatrix_From_Array = function (array) {
-        var matrix_To_Return = new Square_Hill_Matrix_1["default"](array.length / 8, []);
+        var matrix_To_Return = new Square_Hill_Matrix_1["default"](8, []);
         matrix_To_Return._matrix = matrix_To_Return.InitializeAs(0, 8);
-        array.map(function (item, index) { return (matrix_To_Return._matrix[index]._data = item); });
-        console.log("Array from sqaure matrix is:", matrix_To_Return);
+        array.map(function (item, index) { return matrix_To_Return._matrix[index]._data = item; });
         return matrix_To_Return;
     };
     Transform_Data.Get_Array_From_ElementaryMatrix = function (matrix) {
@@ -53,14 +52,12 @@ var Transform_Data = /** @class */ (function () {
         var diagonal_matrix = new Diagonal_Hill_Matrix_1["default"](matrix._order, []);
         diagonal_matrix = matrix;
         array_To_Return = diagonal_matrix._matrix.map(function (item) { return item._data; });
-        console.log("Array from diagonal matrix is:", array_To_Return);
         return array_To_Return;
     };
     Transform_Data.Get_DiagonalMatrix_From_Array = function (array) {
         var matrix_To_Return = new Diagonal_Hill_Matrix_1["default"](8, []);
         matrix_To_Return._matrix = Diagonal_Hill_Matrix_1["default"].InitializeAs(0, 8);
         array.map(function (item, index) { return (matrix_To_Return._matrix[index]._data = item); });
-        console.log("Array from diagonal matrix is:", matrix_To_Return);
         return matrix_To_Return;
     };
     Transform_Data.getAsciFromString = function (stringArray) {

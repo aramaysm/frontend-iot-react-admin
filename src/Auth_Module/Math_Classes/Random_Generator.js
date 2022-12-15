@@ -9,7 +9,6 @@ var Random_Generator = /** @class */ (function () {
         for (var i = 0; i < size; i++) {
             array_result[i] = 0;
         }
-        console.log("Zeros array is :", array_result);
         return array_result;
     };
     Random_Generator.GCDExt = function (a, b, x, y) {

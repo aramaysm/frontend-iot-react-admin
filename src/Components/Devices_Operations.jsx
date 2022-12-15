@@ -32,6 +32,7 @@ export default function Devices_Operations() {
   const [colorAlert, setColorAlert] = React.useState("");
   const [openAlertDialog, setOpenAlertDialog] = React.useState(false);
   const [userData, setUserData] = React.useState({});
+  const [errorField, setErrorField] = React.useState(false);
 
   React.useEffect(() => onLoadInfo, []);
 
@@ -54,7 +55,7 @@ export default function Devices_Operations() {
       )
       .then((response) => {
         if (
-          response.data.status === process.env.REACT_APP_DEVICE_STATUS_CHANGED
+          response.data.status === 303
         ) {
           console.log("Device status changed");
           onLoadInfo();
@@ -104,7 +105,7 @@ export default function Devices_Operations() {
         Services.getAxiosConfig(tokenLocalStorage)
       )
       .then((response) => {
-        if (response.data.status === process.env.REACT_APP_USER_LOAD) {
+        if (response.data.status === 100) {
           setUsers_list(response.data.data);
         }
       })
@@ -153,7 +154,7 @@ export default function Devices_Operations() {
         Services.getAxiosConfig(tokenLocalStorage)
       )
       .then((response) => {
-        if (response.data.status === process.env.REACT_APP_DEVICE_LOAD) {
+        if (response.data.status === 300) {
           setDataForLoad(response.data.data);
           setTotalItems(response.data.data.length);
         }
@@ -202,19 +203,21 @@ export default function Devices_Operations() {
         Services.getAxiosConfig(tokenLocalStorage)
       )
       .then((response) => {
-        if (response.data.status === process.env.REACT_APP_DEVICE_CREATED) {
+        if (response.data.status === 301) {
           onLoadInfo();
           setOpenDialog(false);
           setMessageAlert("Dispositivo creado con éxito");
           setOpenAlert(true);
           setColorAlert("success");
-         
+          setErrorField(false);
         }
       })
       .catch((error) => {
         if (error.response.status === 409) {
+          setErrorField(true);
           setMessageAlert("Ocurrió un conflicto al guardar el dispositivo");
           setOpenAlert(true);
+          setOpenAlertDialog(false);
           setColorAlert("error");
           console.log("Error conflict");
         }
@@ -277,7 +280,8 @@ export default function Devices_Operations() {
       <Dialog_Device
         onClose={() => setOpenDialog(false)}
         onCloseSaved={onHandleDevice}
-        open={openDialog}
+        open={openDialog} 
+        errorField={errorField}
         users={users_list}
       />
     </div>

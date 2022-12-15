@@ -163,7 +163,7 @@ export default class Diagonal_Hill_Matrix {
   ToSquareHillMatrix(matrix: Diagonal_Hill_Matrix): Square_Hill_Matrix {
     let order = matrix._order;
     let result: Square_Hill_Matrix = new Square_Hill_Matrix(order, []);
-    result._matrix = Diagonal_Hill_Matrix.InitializeAs(1, order);
+    result._matrix = result.InitializeAs(-1, order);
 
     for (let rowCol = 0; rowCol < order; rowCol++)
       result._matrix[rowCol * order + rowCol] =

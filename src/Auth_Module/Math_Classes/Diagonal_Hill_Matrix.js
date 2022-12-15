@@ -135,7 +135,7 @@ var Diagonal_Hill_Matrix = /** @class */ (function () {
     Diagonal_Hill_Matrix.prototype.ToSquareHillMatrix = function (matrix) {
         var order = matrix._order;
         var result = new Square_Hill_Matrix_1["default"](order, []);
-        result._matrix = Diagonal_Hill_Matrix.InitializeAs(1, order);
+        result._matrix = result.InitializeAs(-1, order);
         for (var rowCol = 0; rowCol < order; rowCol++)
             result._matrix[rowCol * order + rowCol] =
                 matrix._matrix[rowCol];

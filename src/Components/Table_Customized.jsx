@@ -10,9 +10,8 @@ import Button from "@mui/material/Button";
 import { useNavigate } from "react-router-dom";
 import IconButton from "@mui/material/IconButton";
 import TablePagination from "@mui/material/TablePagination";
-import FormControlLabel from '@mui/material/FormControlLabel';
-import Switch from '@mui/material/Switch';
-
+import FormControlLabel from "@mui/material/FormControlLabel";
+import Switch from "@mui/material/Switch";
 
 export default function Table_Customized(props) {
   const {
@@ -32,7 +31,6 @@ export default function Table_Customized(props) {
   const history = useNavigate();
 
   const handleClickRow = (event, idSelection) => {
-
     setSelectedRow(idSelection);
 
     if (onElementSelected !== null) {
@@ -48,8 +46,6 @@ export default function Table_Customized(props) {
     setRowsPerPage(+event.target.value);
     setPage(0);
   };
-
-  
 
   return (
     <TableContainer component={Paper}>
@@ -91,31 +87,40 @@ export default function Table_Customized(props) {
                 if (column.id === "status") {
                   if (row[column.id] === "Activo") {
                     value = (
-                      
-                      <FormControlLabel control={
-                      <Switch checked={true} className="color-success"
-                        onChange={onHandleSwitch}
-                        inputProps={{ 'aria-label': 'controlled' }}
-                      />} 
-                      label="Activo" />
+                      <FormControlLabel
+                        control={
+                          <Switch
+                            checked={true}
+                            className="color-success"
+                            onChange={onHandleSwitch}
+                            inputProps={{ "aria-label": "controlled" }}
+                          />
+                        }
+                        label="Activo"
+                      />
                     );
                   } else {
                     value = (
-                      <FormControlLabel control={
-                        <Switch checked={false}
-                          onChange={onHandleSwitch}
-                          inputProps={{ 'aria-label': 'controlled' }}
-                        />} 
-                        label="Inactivo" />
+                      <FormControlLabel
+                        control={
+                          <Switch
+                            checked={false}
+                            onChange={onHandleSwitch}
+                            inputProps={{ "aria-label": "controlled" }}
+                          />
+                        }
+                        label="Inactivo"
+                      />
                     );
                   }
-                  
-                } 
-                else if(column.id === "photo"){
-                  value = <img src={row[column.id]} height="100px"
-                  width="100px"/>
-                }
-                else {
+                } else if (column.id === "photo") {
+                  value = (
+                    <img src={row[column.id]} height="100px" width="100px" />
+                  );
+                } else {
+                  if (column.id === "user") 
+                  value = row["user"]["username"];
+                  else 
                   value = row[column.id];
                 }
 
@@ -130,13 +135,16 @@ export default function Table_Customized(props) {
               buttonsArray !== undefined ? (
                 buttonsArray.map((button) => (
                   <TableCell align="center">
-                    
-                    <Button variant="outlined" startIcon={button.icon} className={button.className}
+                    <Button
+                      variant="outlined"
+                      startIcon={button.icon}
+                      className={button.className}
                       disabled={row.status === "Inactivo" ? true : false}
                       onClick={(event) => {
                         handleClickRow(event, row);
                         setTimeout(() => button.functionOnClick(), 300);
-                      }}>
+                      }}
+                    >
                       {button.value}
                     </Button>
                   </TableCell>

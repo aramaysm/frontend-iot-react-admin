@@ -6,7 +6,10 @@ var MODULUS = 251;
 var Modular_Data = /** @class */ (function () {
     function Modular_Data(newData) {
         this._data = 0;
-        this._data = newData % MODULUS;
+        if (newData === 0)
+            this._data = 0;
+        else
+            this._data = newData % MODULUS;
     }
     Modular_Data.prototype.get_data = function () {
         return this._data;
@@ -15,8 +18,9 @@ var Modular_Data = /** @class */ (function () {
         this._data = ((value % MODULUS) + MODULUS) % MODULUS;
     };
     Modular_Data.operator_mult = function (data1, data2) {
-        if (data1 === undefined || data2 === undefined)
+        if (data1 === undefined || data2 === undefined) {
             return new Modular_Data(0);
+        }
         else
             return new Modular_Data(data1._data * data2._data);
     };

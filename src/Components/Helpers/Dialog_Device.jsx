@@ -13,10 +13,10 @@ import DialogActions from "@mui/material/DialogActions";
 import Select from "@mui/material/Select";
 import InputLabel from "@mui/material/InputLabel";
 import FormControl from "@mui/material/FormControl";
-import FormControlLabel from '@mui/material/FormControlLabel';
-import Checkbox from '@mui/material/Checkbox';
+import FormControlLabel from "@mui/material/FormControlLabel";
+import Checkbox from "@mui/material/Checkbox";
 import { MenuItem } from "@mui/material";
-
+import { OpenInFullTwoTone } from "@mui/icons-material";
 
 const CssTextField = styled(TextField)({
   "& label.Mui-focused": {
@@ -58,16 +58,22 @@ const CssFormControl = styled(FormControl)({
   },
 });
 
-
 export default function Dialog_Device(props) {
-  const { onClose, onCloseSaved, open, users } = props;
+  const { onClose, onCloseSaved, open, users, errorField } = props;
 
   const [brand, setBrand] = React.useState("");
   const [model, setModel] = React.useState("");
   const [serial, setSerial] = React.useState("");
-  const [isHandled, setIsHandled] = React.useState(true);
+
   const [url_photo, setUrl_photo] = React.useState("");
-  const [userSelected,setUserSelected] = React.useState(0); //id del userdetail selected
+  const [userSelected, setUserSelected] = React.useState(0); //id del userdetail selected
+
+  React.useEffect(() => {
+    setBrand("");
+    setModel("");
+    setSerial("");
+    setUrl_photo("");
+  }, [open]);
 
   const handleClose = () => {
     onClose();
@@ -75,99 +81,99 @@ export default function Dialog_Device(props) {
 
   const handleSave = () => {
     console.log("Saved");
-    
-    if(isHandled === true)
+
     onCloseSaved({
       brand,
       model,
-      serialId:serial,
-      photo:url_photo,
-      is_handled: isHandled,
-      user_id:userSelected
-    });
-    else
-    onCloseSaved({
-      brand,
-      model,
-      serialId:serial,
-      photo:url_photo,
-      is_handled: isHandled
+      serialId: serial,
+      photo: url_photo,
+      is_handled: true,
+      user_id: userSelected,
     });
   };
 
-  const onChangeFiltrered=(event)=>{
-    console.log("Change:",event.target.value);
+  const onChangeFiltrered = (event) => {
+    console.log("Change:", event.target.value);
     setUserSelected(event.target.value);
-  }
+  };
 
   return (
     <Dialog open={open} onClose={handleClose}>
-      <DialogTitle>Nuevo dispositivo</DialogTitle>
-      <DialogContent>
-        <CssTextField
-          className="m-2"
-          label="Marca"
-          onChange={(event) => setBrand(event.target.value)}
-          value={brand}
-          fullWidth
-        />
-        <CssTextField
-          className="m-2"
-          label="Modelo"
-          onChange={(event) => setModel(event.target.value)}
-          value={model}
-          fullWidth
-        />
-        <CssTextField
-          className="m-2"
-          label="Número de serie"
-          onChange={(event) => setSerial(event.target.value)}
-          value={serial}
-          fullWidth
-        />
-        <CssTextField
-          className="m-2"
-          label="Url de la photo"
-          onChange={(event) => setUrl_photo(event.target.value)}
-          value={url_photo}
-          fullWidth
-        />
-          <FormControlLabel className="m-2" control={<Checkbox checked={isHandled} 
-         onChange={(event)=>setIsHandled(event.target.checked)} />} label="Es un smartphone" />
-       {
-        isHandled
-        ?
-        <FormControl className="m-2" variant="outlined" fullWidth>
-        <InputLabel id="demo-simple-select-label">
-          Seleccionar usuario que lo utilizará
-        </InputLabel>
-        <Select
-          color="info"
-          labelId="demo-simple-select-label"
-          id="demo-simple-select"
-          value={userSelected}
-          onChange={onChangeFiltrered}
-        >
-          {users.map((opt) => (
-            <MenuItem id={opt.id} value={opt.id}>
-              {opt.fullname}
-            </MenuItem>
-          ))}
-        </Select>
-      </FormControl>
+      <div className="card">
+        <div className="card-header bg-transparent">
+          <h4 style={{ color: "#34434d" }}>Nuevo dispositivo</h4>
+        </div>
+        <div className="card-body">
+          <DialogContent className="row j-c-c">
+            <CssTextField
+              className="col-12 col-lg-8 col-sm-12 mb-3"
+              required
+              label="Marca"
+              onChange={(event) => setBrand(event.target.value)}
+              value={brand}
+            />
+            <CssTextField
+              required
+              label="Modelo"
+              className="col-12 col-lg-8 col-sm-12 mb-3"
+              onChange={(event) => setModel(event.target.value)}
+              value={model}
+            />
+            <CssTextField
+              required
+              helperText="Es único para cada dispositivo"
+              error={errorField}
+              className="col-12 col-lg-8 col-sm-12 mb-3"
+              label="Número de serie"
+              onChange={(event) => setSerial(event.target.value)}
+              value={serial}
+            />
+            <CssTextField
+              className="col-12 col-lg-8 col-sm-12 mb-4"
+              label="Url de la photo"
+              onChange={(event) => setUrl_photo(event.target.value)}
+              value={url_photo}
+            />
 
-        :
-        null
-       }
-      </DialogContent>
-      <DialogActions>
-        <Button className="button-Secondary" onClick={handleClose}>
-          Cancelar
-        </Button>
-        <Button className="button-Primary" onClick={handleSave}>
-          Guardar
-        </Button>
-      </DialogActions>
+            <CssFormControl
+              required
+              className="col-12 col-lg-8 col-sm-12 mb-3"
+              variant="outlined"
+            >
+              <InputLabel id="demo-simple-select-label">
+                Seleccionar responsable
+              </InputLabel>
+              <Select
+                color="info"
+                labelId="demo-simple-select-label"
+                label="Seleccionar responsable"
+                value={userSelected}
+                onChange={onChangeFiltrered}
+              >
+                {users.map((opt) => (
+                  <MenuItem id={opt.id} value={opt.id}>
+                    {opt.fullname}
+                  </MenuItem>
+                ))}
+              </Select>
+            </CssFormControl>
+          </DialogContent>
+        </div>
+        <div className="card-footer bg-transparent">
+          <DialogActions>
+            <Button className="button-Secondary" onClick={handleClose}>
+              Cancelar
+            </Button>
+            <Button
+              className="button-Primary"
+              disabled={brand === "" || model === "" || serial === ""}
+              onClick={handleSave}
+            >
+              Guardar
+            </Button>
+          </DialogActions>
+        </div>
+      </div>
     </Dialog>
   );
 }

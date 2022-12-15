@@ -6,14 +6,12 @@ import Elementary_Matrix from "../Math_Classes/Elementary_Matrix";
 import Diagonal_Hill_Matrix from "../Math_Classes/Diagonal_Hill_Matrix";
 
 export default class Transform_Data {
-
-
   static Get_Array_From_SquareMatrix(
     matrix: Square_Hill_Matrix
   ): Array<number> {
     let array_To_Return: Array<number> = new Array<number>(matrix._order);
 
-    let square_matrix: Square_Hill_Matrix = new Square_Hill_Matrix(8,[]);
+    let square_matrix: Square_Hill_Matrix = new Square_Hill_Matrix(8, []);
 
     square_matrix = matrix;
 
@@ -25,15 +23,10 @@ export default class Transform_Data {
   }
 
   static Get_SquareMatrix_From_Array(array: Array<number>): Square_Hill_Matrix {
-    let matrix_To_Return: Square_Hill_Matrix = new Square_Hill_Matrix(
-      array.length / 8,
-      []
-    );
+    let matrix_To_Return: Square_Hill_Matrix = new Square_Hill_Matrix(8,[]);
     matrix_To_Return._matrix = matrix_To_Return.InitializeAs(0, 8);
 
-    array.map((item, index) => (matrix_To_Return._matrix[index]._data = item));
-
-    console.log("Array from sqaure matrix is:", matrix_To_Return);
+    array.map((item, index) => matrix_To_Return._matrix[index]._data = item);
 
     return matrix_To_Return;
   }
@@ -66,10 +59,7 @@ export default class Transform_Data {
     let matrix_To_Return: Elementary_Matrix = new Elementary_Matrix(8);
 
     let vector1: Hill_Vector = new Hill_Vector(8, array.slice(0, 8));
-    let vector2: Hill_Vector = new Hill_Vector(
-      8,
-      array.slice(8, 16)
-    );
+    let vector2: Hill_Vector = new Hill_Vector(8, array.slice(8, 16));
     let factInv: Modular_Data = new Modular_Data(0);
     factInv._data = array[16];
 
@@ -96,8 +86,6 @@ export default class Transform_Data {
 
     array_To_Return = diagonal_matrix._matrix.map((item) => item._data);
 
-    console.log("Array from diagonal matrix is:", array_To_Return);
-
     return array_To_Return;
   }
 
@@ -111,15 +99,11 @@ export default class Transform_Data {
     matrix_To_Return._matrix = Diagonal_Hill_Matrix.InitializeAs(0, 8);
 
     array.map((item, index) => (matrix_To_Return._matrix[index]._data = item));
-
-    console.log("Array from diagonal matrix is:", matrix_To_Return);
-
     return matrix_To_Return;
   }
 
-  static getAsciFromString(stringArray:string):Array<number>{
-
-    let arrayNumber:Array<number> = new Array<number>();
+  static getAsciFromString(stringArray: string): Array<number> {
+    let arrayNumber: Array<number> = new Array<number>();
 
     for (let i = 0; i < stringArray.length; i++) {
       arrayNumber[i] = stringArray.charCodeAt(i);

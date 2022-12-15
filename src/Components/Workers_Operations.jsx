@@ -42,7 +42,7 @@ export default function Workers_Operations() {
         Services.getAxiosConfig(tokenLocalStorage)
       )
       .then((response) => {
-        if (response.data.status === process.env.REACT_APP_USER_LOAD) {
+        if (response.data.status === 100) {
           setDataForLoad(response.data.data);
           setTotalItems(response.data.data.length);
         }
@@ -75,6 +75,8 @@ export default function Workers_Operations() {
           setTimeout(() => Services.habilitarBotones("button-Primary"), 1000);
         }
       });
+
+     
   };
 
   const onChangeRowPerPage = () => {};
@@ -175,7 +177,7 @@ export default function Workers_Operations() {
         Services.getAxiosConfig()
       )
       .then((response) => {
-        if (response.data.status === process.env.REACT_APP_USER_UPDATED) {
+        if (response.data.status === 102) {
           setUser(response.data.data);
           console.log("User edited");
           setOpenDialog(false);
@@ -233,7 +235,7 @@ export default function Workers_Operations() {
       )
       .then((response) => {
         if (
-          response.data.status === process.env.REACT_APP_USER_STATUS_CHANGED
+          response.data.status === 103
         ) {
           console.log("User status changed");
           onLoadInfo();

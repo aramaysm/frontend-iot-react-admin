@@ -18,7 +18,7 @@ const {icon, title, value, percentage, percentageColor,textForPercentage,colorBa
         </div>
        
         <div class="card-footer bg-transparent border-none p-3">
-          <p class="mb-0"><span class={"text-sm font-weight-bolder text-"+percentageColor}>{percentage}</span>
+          <p class="mb-0"><span class={"text-sm font-weight-bolder text-"+percentageColor}>{percentage+"% "}</span>
           {textForPercentage}</p>
         </div>
       </div>

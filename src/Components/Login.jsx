@@ -59,7 +59,7 @@ export default function Login(props) {
 
   const handleSuccessFullAuth = (data) => {
     props.handleLoggin(data);
-    history("/users");
+    history("/");
   };
 
   const onLogin = async (ev) => {
@@ -73,7 +73,7 @@ export default function Login(props) {
     await protocol
       .ExecuteProtocol(username, password, Services.loginAdminUrl())
       .then((response) => {
-        if (response.data.status === process.env.REACT_APP_CRDEDENTIALS_OK) {
+        if (response.data.status === 200) {
           Services.saveValueInCookies(response.data.data.token);
           setTimeout(() => Services.habilitarBotones("button-Primary"), 1000);
           let date2 = new Date();
@@ -117,6 +117,7 @@ export default function Login(props) {
   return (
     <div className="w-100 h-100 position-absolute bg-light login-backg justify-content-center align-items-lg-center d-flex">
       <div className="col-lg-7 col-sm-12 col-12 ">
+        <form>
         <div className="row bg-white shadow rounded-15 m-3 justify-content-center align-content-center d-flex ">
           <div className="col-lg-6 col-sm-9 col-9  justify-content-center align-content-center d-flex text-center">
             <Alert_MUI
@@ -190,7 +191,9 @@ export default function Login(props) {
             </div>
           </div>
         </div>
-      </div>
+      
+        </form>
+       </div>
     </div>
   );
 }
