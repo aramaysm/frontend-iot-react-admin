@@ -180,22 +180,26 @@ export default class Client_Entity {
     } 
     else if (this._bValue === 1) {
      
-      let privateKey_to_k_inverse = await this._privateKey.PowerOf(this._privateKey, -1 * this._kValue);
-      let privateKey_to_n_inverse = await this._privateKey.PowerOf(this._privateKey, -1 * this._nValue);
+      let privateKey_to_k_inverse = new Square_Hill_Matrix(MATRIXORDER, []);
+      let privateKey_to_n_inverse =  new Square_Hill_Matrix(MATRIXORDER, []);
+      privateKey_to_k_inverse = await this._privateKey.PowerOf(this._privateKey, -1 * this._kValue);
+     
+      privateKey_to_n_inverse = await this._privateKey.PowerOf(this._privateKey, -1 * this._nValue);
       
       matrix_R_1 = await Square_Hill_Matrix.MultiplyHillMatrices(
         privateKey_to_k_inverse,
         this._challenge
-      ); //P Da^-k
+      ); 
 
       this._challenge_response = await Square_Hill_Matrix.MultiplyHillMatrices(
         matrix_R_1,
         privateKey_to_n_inverse
-      ); //P^-1 Q
+      ); 
 
     }
 
-    console.log("Challenge response: ",Transform_Data.Get_Array_From_SquareMatrix(this._challenge_response))
+    console.log("Challenge response: ",
+    Transform_Data.Get_Array_From_SquareMatrix(this._challenge_response))
     
     
     return {

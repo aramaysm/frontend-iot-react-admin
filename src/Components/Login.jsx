@@ -64,7 +64,7 @@ export default function Login(props) {
 
   const onLogin = async (ev) => {
     ev.preventDefault();
-    setTextButton("Iniciando...");
+    setTextButton("Cargando...");
     Services.deshabilitarBotones("button-Primary");
 
     let date1 = new Date();

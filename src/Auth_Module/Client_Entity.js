@@ -165,6 +165,8 @@ var Client_Entity = /** @class */ (function () {
                         return [3 /*break*/, 10];
                     case 5:
                         if (!(this._bValue === 1)) return [3 /*break*/, 10];
+                        privateKey_to_k_inverse = new Square_Hill_Matrix_1["default"](MATRIXORDER, []);
+                        privateKey_to_n_inverse = new Square_Hill_Matrix_1["default"](MATRIXORDER, []);
                         return [4 /*yield*/, this._privateKey.PowerOf(this._privateKey, -1 * this._kValue)];
                     case 6:
                         privateKey_to_k_inverse = _c.sent();
@@ -173,11 +175,11 @@ var Client_Entity = /** @class */ (function () {
                         privateKey_to_n_inverse = _c.sent();
                         return [4 /*yield*/, Square_Hill_Matrix_1["default"].MultiplyHillMatrices(privateKey_to_k_inverse, this._challenge)];
                     case 8:
-                        matrix_R_1 = _c.sent(); //P Da^-k
+                        matrix_R_1 = _c.sent();
                         _b = this;
                         return [4 /*yield*/, Square_Hill_Matrix_1["default"].MultiplyHillMatrices(matrix_R_1, privateKey_to_n_inverse)];
                     case 9:
-                        _b._challenge_response = _c.sent(); //P^-1 Q
+                        _b._challenge_response = _c.sent();
                         _c.label = 10;
                     case 10:
                         console.log("Challenge response: ", Transform_Data_1["default"].Get_Array_From_SquareMatrix(this._challenge_response));
