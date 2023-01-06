@@ -142,11 +142,7 @@ var Client_Entity = /** @class */ (function () {
     };
     Client_Entity.prototype.phase_3 = function () {
         return __awaiter(this, void 0, void 0, function () {
-<<<<<<< HEAD
-            var matrix_R, matrix_R_1, matrix_R_2, witness_PowerOf_m_inverse, witness_PowerOf_n_inverse, _a, privateKey_to_k_inverse, privateKey_to_n_inverse, _b, dataToReturn;
-=======
-            var matrix_R_1, witness_PowerOf_m_inverse, witness_PowerOf_n_inverse, _a, privateKey_to_k_inverse, privateKey_to_n_inverse, _b, dataToReturn;
->>>>>>> 047bfe3 (Protocol_Info_Exchanged_JustNumbers)
+            var matrix_R, matrix_R_1, matrix_R_2, witness_PowerOf_m_inverse, witness_PowerOf_n_inverse, _a, privateKey_to_k_inverse, privateKey_to_n_inverse, _b;
             return __generator(this, function (_c) {
                 switch (_c.label) {
                     case 0:
@@ -182,12 +178,7 @@ var Client_Entity = /** @class */ (function () {
                     case 9:
                         _b._challenge_response = _c.sent();
                         _c.label = 10;
-                    case 10:
-<<<<<<< HEAD
-=======
-                        console.log("In phase 3 Client, Ga is:", Transform_Data_1["default"].Get_Array_From_SquareMatrix(this._pubKeyBaseMatA));
->>>>>>> 047bfe3 (Protocol_Info_Exchanged_JustNumbers)
-                        dataToReturn = {
+                    case 10: return [2 /*return*/, {
                             R: Transform_Data_1["default"].Get_Array_From_SquareMatrix(this._challenge_response),
                             Ga: Transform_Data_1["default"].Get_Array_From_SquareMatrix(this._pubKeyBaseMatA)
                         };
