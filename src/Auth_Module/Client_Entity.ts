@@ -158,17 +158,11 @@ export default class Client_Entity {
   }
   async phase_3(): Promise<any> {
    
-    let matrix_R: Square_Hill_Matrix = new Square_Hill_Matrix(MATRIXORDER, []);
     let matrix_R_1: Square_Hill_Matrix = new Square_Hill_Matrix(
       MATRIXORDER,
       []
     );
-    let matrix_R_2: Square_Hill_Matrix = new Square_Hill_Matrix(
-      MATRIXORDER,
-      []
-    );
-
-   
+  
     if (this._bValue === 0) {
       let witness_PowerOf_m_inverse = await this._witness.PowerOf(this._witness, -1 * this._mValue);
       let witness_PowerOf_n_inverse = await this._witness.PowerOf(this._witness, -1 * this._nValue);
@@ -198,6 +192,8 @@ export default class Client_Entity {
         privateKey_to_n_inverse
       ); 
     }     
+
+    console.log("In phase 3 Client, Ga is:",Transform_Data.Get_Array_From_SquareMatrix(this._pubKeyBaseMatA));
 
     let dataToReturn = {
       R: Transform_Data.Get_Array_From_SquareMatrix(this._challenge_response),
