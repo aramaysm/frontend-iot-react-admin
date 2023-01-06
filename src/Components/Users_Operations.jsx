@@ -173,7 +173,7 @@ export default function Users_Operations() {
   const onHandleSaveData = (data) => {
     const tokenLocalStorage = Services.getValueFromCookies();
 
-    console.log("Data: ",data);
+    
     axios
       .post(
         Services.getAllUsersUrl(),

@@ -111,4 +111,61 @@ export default class Transform_Data {
 
     return arrayNumber;
   }
+
+  static getArrayFromObject(object: any): Array<any> {
+
+    let arrayToReturn: Array<any> = new Array<any>();
+    const objectValues = Object.values(object);
+
+    
+    objectValues.map((item) => {
+      if(item instanceof Array){
+        item.map((item) => arrayToReturn.push(item));
+    }
+  else {
+    arrayToReturn.push(item);
+  }}
+    );
+
+    
+    return arrayToReturn;
+  }
+
+  static getObjectFromArray(array: Array<any>, phase:string): any {
+
+    let objectToReturn: any = {};
+
+    switch(phase){
+      case "phase0":
+        objectToReturn = {
+          P: array.slice(0, 17),
+          G: array.slice(17, 81),
+          GB: array.slice(81, 145),
+          P_Inv: array.slice(145, 209),
+          m: array[209],
+          n: array[210]
+        }
+        break;
+      case "phase1":
+        objectToReturn = {
+          GA: array.slice(0, 64),
+          witness: array.slice(64, 128),
+        }
+        break;
+        case "phase2":
+        objectToReturn = {
+          challenge: array.slice(0, 64),
+          b: array[64],
+        }
+        break;
+        case "phase3":
+        objectToReturn = {
+          R: array.slice(0, 64),
+          Ga: array.slice(64, 128)
+        }
+        break;
+    }
+    
+    return objectToReturn;
+  }
 }

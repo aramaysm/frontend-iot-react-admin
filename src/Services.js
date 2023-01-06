@@ -118,7 +118,7 @@ export default class Services {
       }
 
       static getAllUsersHandlerDevicesUrl() {
-        return apiUrl + "/user-details/names";
+        return apiUrl + "/user-details/names-handlers";
       }
 
       //Roles
@@ -142,6 +142,12 @@ export default class Services {
 
       static getAllAuthLogUrlCheckInTimes() {
         return apiUrl + "/auth/report/checkInHour/";
+      }
+      static getDeviceHandlerCredentials(){
+        return apiUrl + "/devices-handlers/getCredentials";
+      }
+       static deviceAuth(){
+        return apiUrl + "/devices/login/";
       }
 }
 

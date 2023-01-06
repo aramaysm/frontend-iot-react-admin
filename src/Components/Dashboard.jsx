@@ -43,12 +43,39 @@ export default function Dashboard() {
   const [filtrerBy, setFiltrerBy] = React.useState("");
   const [hourSelected, setHourSelected] = React.useState("10");
   const [allData, setAllData] = React.useState([]);
-  const [dataToCardsReport, setDataToCardsReport] = React.useState([]);
+  const [dataToCardsReport, setDataToCardsReport] = React.useState([ {
+    icon: <Add fontSize="large" sx={{ color: "white" }} />,
+    title: "Total de días de asistencia",
+    percentage: "0%",
+    value: 0,
+    percentageColor: "success",
+    textForPercentage: "Mes en curso",
+    colorBackIcon: "success",
+  },
+  {
+    icon: <Add fontSize="large" sx={{ color: "white" }} />,
+    title: "Total de llegadas temprano",
+    percentage: 0,
+    value: 0,
+    percentageColor: "success",
+    textForPercentage: "Mes en curso",
+    colorBackIcon: "info",
+  },
+  {
+    icon: <Add fontSize="large" sx={{ color: "white" }} />,
+    title: "Total de llegadas tarde",
+    percentage: 0,
+    value: 0,
+    percentageColor: "success",
+    textForPercentage: "Mes en curso",
+    colorBackIcon: "secondary",
+  }]);
 
   const history = useNavigate();
 
   React.useEffect(() => {
     onLoadInfo();
+    
   }, []);
 
 
@@ -66,6 +93,7 @@ export default function Dashboard() {
           console.log(response.data.data);
           setAllData(response.data.data);
           setDataLoadTable(response.data.data.allArrivals);
+<<<<<<< HEAD
           setDataToCardsReport([
             {
               icon: <Add fontSize="large" 
@@ -98,6 +126,25 @@ export default function Dashboard() {
               colorBackIcon: "secondary",
             },
           ])
+=======
+          let dataToCardsActually = dataToCardsReport;
+          dataToCardsActually[0].value = response.data.data.allArrivals.length;
+          dataToCardsActually[0].percentage = Math.ceil(
+            (response.data.data.allArrivals.length / 31) *
+              100
+          );
+          dataToCardsActually[1].value = response.data.data.earlyArrivals.length;
+          dataToCardsActually[1].percentage = Math.ceil(
+            (response.data.data.earlyArrivals.length / response.data.data.allArrivals.length) *
+              100
+          );
+          dataToCardsActually[2].value = response.data.data.lateArrivals.length;
+          dataToCardsActually[2].percentage = Math.ceil(
+            (response.data.data.lateArrivals.length / response.data.data.allArrivals.length) * 100
+          );
+          setDataToCardsReport(dataToCardsActually);
+         
+>>>>>>> 047bfe3 (Protocol_Info_Exchanged_JustNumbers)
         }
       })
       .catch((error) => {
@@ -118,6 +165,9 @@ export default function Dashboard() {
       });
   };
 
+
+  
+
   const onElementSelect = () => {};
 
   const onChangeFiltrered = (event) => {
@@ -131,7 +181,7 @@ export default function Dashboard() {
   return (
     <div className="container-fluid">
       <MiniDrawer title="Dashboard" itemSelected={0} />
-      <div class="container-fluid py-4">
+      <div className="container-fluid py-4">
         <Alert_MUI
           color={colorAlert}
           msg={messageAlert}
@@ -140,9 +190,13 @@ export default function Dashboard() {
             setOpenAlert(false);
           }}
         />
-        <div class="row justify-content-around d-flex align-content-around">
+        <div className="row justify-content-around d-flex align-content-around">
           {dataToCardsReport.map((item) => (
+<<<<<<< HEAD
             <div class="col-xl-3  col-sm-6 mb-xl-0 mb-4">
+=======
+            <div className="col-lg-4 col-sm-6 mb-xl-0 mb-4">
+>>>>>>> 047bfe3 (Protocol_Info_Exchanged_JustNumbers)
               <Card_With_Icon
                 colorBackIcon={item.colorBackIcon}
                 icon={item.icon}
@@ -199,8 +253,8 @@ export default function Dashboard() {
               </div>
             </div>
             <div className="card-body mt-1">
-              <div class="row j-c-c">
-                <div class="col-lg-11 col-md-11 mt-2 mb-2 ">
+              <div className="row j-c-c">
+                <div className="col-lg-11 col-md-11 mt-2 mb-2 ">
                   {dataLoadTable === null || dataLoadTable.length == 0 ? (
                     <div className="text-center">
                       <img

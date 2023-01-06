@@ -59,18 +59,20 @@ var Client_Entity = /** @class */ (function () {
     }
     Client_Entity.prototype.phase_0 = function (info, pass) {
         return __awaiter(this, void 0, void 0, function () {
-            var squareF, complementary_Base_Matrix1, _a, _b, _c, _d, _e, _f, _g, _h;
+            var objectWithInfo, squareF, complementary_Base_Matrix1, _a, _b, _c, _d, _e, _f, _g, _h;
             return __generator(this, function (_j) {
                 switch (_j.label) {
                     case 0:
+                        objectWithInfo = Transform_Data_1["default"].getObjectFromArray(info, "phase0");
                         this.CreateEigenValuesMatrixFor(); //DA
-                        this._eigVectMat = Transform_Data_1["default"].Get_ElementaryMatrix_From_Array(info["P"]); //matrix P
-                        this._invEigVectMat = Transform_Data_1["default"].Get_SquareMatrix_From_Array(info["P_Inv"]);
-                        this._mValue = info["m"]; //m value
-                        this._nValue = info["n"]; //n value
-                        this._pubKeyBaseCommon = Transform_Data_1["default"].Get_SquareMatrix_From_Array(info["G"]);
-                        this._otherPubKeyMat = Transform_Data_1["default"].Get_SquareMatrix_From_Array(info["GB"]);
+                        this._eigVectMat = Transform_Data_1["default"].Get_ElementaryMatrix_From_Array(objectWithInfo["P"]); //matrix P
+                        this._invEigVectMat = Transform_Data_1["default"].Get_SquareMatrix_From_Array(objectWithInfo["P_Inv"]);
+                        this._mValue = objectWithInfo["m"]; //m value
+                        this._nValue = objectWithInfo["n"]; //n value
+                        this._pubKeyBaseCommon = Transform_Data_1["default"].Get_SquareMatrix_From_Array(objectWithInfo["G"]);
+                        this._otherPubKeyMat = Transform_Data_1["default"].Get_SquareMatrix_From_Array(objectWithInfo["GB"]);
                         squareF = new Square_Hill_Matrix_1["default"](8, Transform_Data_1["default"].getAsciFromString(pass));
+                        console.log("Matiz F:", Transform_Data_1["default"].Get_Array_From_SquareMatrix(squareF));
                         complementary_Base_Matrix1 = new Square_Hill_Matrix_1["default"](8, []);
                         _b = (_a = Square_Hill_Matrix_1["default"]).MultiplyHillMatrices;
                         return [4 /*yield*/, squareF.PowerOf(squareF, this._mValue)];
@@ -99,7 +101,7 @@ var Client_Entity = /** @class */ (function () {
     };
     Client_Entity.prototype.phase_1 = function () {
         return __awaiter(this, void 0, void 0, function () {
-            var matrix_S_1, matrix_S_2, powerOf_k_PrivateKey, powerOf_m_privateKey_Inverse, everything_ok;
+            var matrix_S_1, matrix_S_2, powerOf_k_PrivateKey, powerOf_m_privateKey_Inverse, dataToReturn;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
@@ -109,7 +111,6 @@ var Client_Entity = /** @class */ (function () {
                         matrix_S_1 = new Square_Hill_Matrix_1["default"](MATRIXORDER, []);
                         matrix_S_2 = new Square_Hill_Matrix_1["default"](MATRIXORDER, []);
                         this.InitializeKFor();
-                        console.log("K value :", this._kValue);
                         return [4 /*yield*/, this._privateKey.PowerOf(this._privateKey, this._kValue)];
                     case 1:
                         powerOf_k_PrivateKey = _a.sent();
@@ -124,28 +125,30 @@ var Client_Entity = /** @class */ (function () {
                         matrix_S_2 = _a.sent();
                         //matrix_S = await Square_Hill_Matrix.MultiplyHillMatrices(matrix_S_4, matrix_S_5);
                         this._witness = matrix_S_2;
-                        everything_ok = false;
-                        return [2 /*return*/, {
-                                GA: Transform_Data_1["default"].Get_Array_From_SquareMatrix(this._pubKeyMat),
-                                witness: Transform_Data_1["default"].Get_Array_From_SquareMatrix(matrix_S_2)
-                            }];
+                        dataToReturn = {
+                            GA: Transform_Data_1["default"].Get_Array_From_SquareMatrix(this._pubKeyMat),
+                            witness: Transform_Data_1["default"].Get_Array_From_SquareMatrix(matrix_S_2)
+                        };
+                        return [2 /*return*/, Transform_Data_1["default"].getArrayFromObject(dataToReturn)];
                 }
             });
         });
     };
     Client_Entity.prototype.phase_2 = function (info) {
-        this._bValue = info["b"];
-        this._challenge = Transform_Data_1["default"].Get_SquareMatrix_From_Array(info["challenge"]);
-        console.log("Challenge", Transform_Data_1["default"].Get_Array_From_SquareMatrix(this._challenge));
+        var objectWithInfo = Transform_Data_1["default"].getObjectFromArray(info, "phase2");
+        this._bValue = objectWithInfo["b"];
+        this._challenge = Transform_Data_1["default"].Get_SquareMatrix_From_Array(objectWithInfo["challenge"]);
         return this.phase_3();
     };
     Client_Entity.prototype.phase_3 = function () {
         return __awaiter(this, void 0, void 0, function () {
-            var matrix_R_1, witness_PowerOf_m_inverse, witness_PowerOf_n_inverse, _a, privateKey_to_k_inverse, privateKey_to_n_inverse, _b;
+            var matrix_R, matrix_R_1, matrix_R_2, witness_PowerOf_m_inverse, witness_PowerOf_n_inverse, _a, privateKey_to_k_inverse, privateKey_to_n_inverse, _b, dataToReturn;
             return __generator(this, function (_c) {
                 switch (_c.label) {
                     case 0:
+                        matrix_R = new Square_Hill_Matrix_1["default"](MATRIXORDER, []);
                         matrix_R_1 = new Square_Hill_Matrix_1["default"](MATRIXORDER, []);
+                        matrix_R_2 = new Square_Hill_Matrix_1["default"](MATRIXORDER, []);
                         if (!(this._bValue === 0)) return [3 /*break*/, 5];
                         return [4 /*yield*/, this._witness.PowerOf(this._witness, -1 * this._mValue)];
                     case 1:
@@ -163,8 +166,6 @@ var Client_Entity = /** @class */ (function () {
                         return [3 /*break*/, 10];
                     case 5:
                         if (!(this._bValue === 1)) return [3 /*break*/, 10];
-                        privateKey_to_k_inverse = new Square_Hill_Matrix_1["default"](MATRIXORDER, []);
-                        privateKey_to_n_inverse = new Square_Hill_Matrix_1["default"](MATRIXORDER, []);
                         return [4 /*yield*/, this._privateKey.PowerOf(this._privateKey, -1 * this._kValue)];
                     case 6:
                         privateKey_to_k_inverse = _c.sent();
@@ -173,18 +174,18 @@ var Client_Entity = /** @class */ (function () {
                         privateKey_to_n_inverse = _c.sent();
                         return [4 /*yield*/, Square_Hill_Matrix_1["default"].MultiplyHillMatrices(privateKey_to_k_inverse, this._challenge)];
                     case 8:
-                        matrix_R_1 = _c.sent();
+                        matrix_R_1 = _c.sent(); //P Da^-k
                         _b = this;
                         return [4 /*yield*/, Square_Hill_Matrix_1["default"].MultiplyHillMatrices(matrix_R_1, privateKey_to_n_inverse)];
                     case 9:
                         _b._challenge_response = _c.sent();
                         _c.label = 10;
                     case 10:
-                        console.log("Challenge response: ", Transform_Data_1["default"].Get_Array_From_SquareMatrix(this._challenge_response));
-                        return [2 /*return*/, {
-                                R: Transform_Data_1["default"].Get_Array_From_SquareMatrix(this._challenge_response),
-                                Ga: Transform_Data_1["default"].Get_Array_From_SquareMatrix(this._pubKeyBaseMatA)
-                            }];
+                        dataToReturn = {
+                            R: Transform_Data_1["default"].Get_Array_From_SquareMatrix(this._challenge_response),
+                            Ga: Transform_Data_1["default"].Get_Array_From_SquareMatrix(this._pubKeyBaseMatA)
+                        };
+                        return [2 /*return*/, Transform_Data_1["default"].getArrayFromObject(dataToReturn)];
                 }
             });
         });
@@ -242,7 +243,6 @@ var Client_Entity = /** @class */ (function () {
                     case 2:
                         priv_2 = _a.sent();
                         privKey = priv_2;
-                        console.log("Private key: ", Transform_Data_1["default"].Get_Array_From_SquareMatrix(privKey));
                         return [2 /*return*/, privKey];
                 }
             });

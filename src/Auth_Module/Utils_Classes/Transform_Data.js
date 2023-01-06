@@ -67,6 +67,53 @@ var Transform_Data = /** @class */ (function () {
         }
         return arrayNumber;
     };
+    Transform_Data.getArrayFromObject = function (object) {
+        var arrayToReturn = new Array();
+        var objectValues = Object.values(object);
+        objectValues.map(function (item) {
+            if (item instanceof Array) {
+                item.map(function (item) { return arrayToReturn.push(item); });
+            }
+            else {
+                arrayToReturn.push(item);
+            }
+        });
+        return arrayToReturn;
+    };
+    Transform_Data.getObjectFromArray = function (array, phase) {
+        var objectToReturn = {};
+        switch (phase) {
+            case "phase0":
+                objectToReturn = {
+                    P: array.slice(0, 17),
+                    G: array.slice(17, 81),
+                    GB: array.slice(81, 145),
+                    P_Inv: array.slice(145, 209),
+                    m: array[209],
+                    n: array[210]
+                };
+                break;
+            case "phase1":
+                objectToReturn = {
+                    GA: array.slice(0, 64),
+                    witness: array.slice(64, 128)
+                };
+                break;
+            case "phase2":
+                objectToReturn = {
+                    challenge: array.slice(0, 64),
+                    b: array[64]
+                };
+                break;
+            case "phase3":
+                objectToReturn = {
+                    R: array.slice(0, 64),
+                    Ga: array.slice(64, 128)
+                };
+                break;
+        }
+        return objectToReturn;
+    };
     return Transform_Data;
 }());
 exports["default"] = Transform_Data;

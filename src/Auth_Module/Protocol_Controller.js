@@ -35,6 +35,7 @@ export default class Protocol_Controller {
 
   async phase0() {
     const hashPass = CryptoJS.SHA256(this._password).toString();
+    console.log("Hash:", hashPass);
     this._password = hashPass;
 
     this._protocol = new Client_Entity({

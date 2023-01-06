@@ -52,21 +52,23 @@ export default class Client_Entity {
 
    async phase_0(info: any, pass: string): Promise<any> {
     
+    let objectWithInfo = Transform_Data.getObjectFromArray(info,"phase0");
+
     this.CreateEigenValuesMatrixFor(); //DA
    
     this._eigVectMat = Transform_Data.Get_ElementaryMatrix_From_Array(
-      info["P"]
+      objectWithInfo["P"]
     ); //matrix P
     this._invEigVectMat = Transform_Data.Get_SquareMatrix_From_Array(
-      info["P_Inv"]
+      objectWithInfo["P_Inv"]
     );
-    this._mValue = info["m"]; //m value
-    this._nValue = info["n"]; //n value
+    this._mValue = objectWithInfo["m"]; //m value
+    this._nValue = objectWithInfo["n"]; //n value
     this._pubKeyBaseCommon = Transform_Data.Get_SquareMatrix_From_Array(
-      info["G"]
+      objectWithInfo["G"]
     );
     this._otherPubKeyMat = Transform_Data.Get_SquareMatrix_From_Array(
-      info["GB"]
+      objectWithInfo["GB"]
     );
 
     /****Matriz F-representa la contraseña del usuario recibido en codigo ASCI */
@@ -75,6 +77,8 @@ export default class Client_Entity {
       8,
       Transform_Data.getAsciFromString(pass)
     );
+
+    console.log("Matiz F:",Transform_Data.Get_Array_From_SquareMatrix(squareF));
 
     /***Calculo de Gb=E^m*G*E^n   ***/
     let complementary_Base_Matrix1 = new Square_Hill_Matrix(8, []);
@@ -91,6 +95,7 @@ export default class Client_Entity {
     this._privateKey = await this.Create_PrivateKey(this._diagMat);
     this._pubKeyMat = await this.CreatePublicKeyMatrix(this._pubKeyBaseMatA);
    
+    
   }
   async phase_1(): Promise<any> {
     this._witness = new Square_Hill_Matrix(8, []);
@@ -108,7 +113,6 @@ export default class Client_Entity {
 
     this.InitializeKFor();
 
-    console.log("K value :", this._kValue);
    
     let powerOf_k_PrivateKey = await this._privateKey.PowerOf(
       this._privateKey,
@@ -134,31 +138,37 @@ export default class Client_Entity {
     this._witness = matrix_S_2;
    
 
-    let everything_ok: boolean = false;
-
-    return {
+    let dataToReturn={
       GA: Transform_Data.Get_Array_From_SquareMatrix(this._pubKeyMat),
       witness: Transform_Data.Get_Array_From_SquareMatrix(matrix_S_2),
-    };
+    }
+
+    return Transform_Data.getArrayFromObject(dataToReturn);
   }
   phase_2(info: any): any {
-    this._bValue = info["b"];
+    let objectWithInfo = Transform_Data.getObjectFromArray(info,"phase2");
+
+    this._bValue = objectWithInfo["b"];
     this._challenge = Transform_Data.Get_SquareMatrix_From_Array(
-      info["challenge"]
+      objectWithInfo["challenge"]
     );
 
-    console.log("Challenge", Transform_Data.Get_Array_From_SquareMatrix(this._challenge));
-
+   
     return this.phase_3();
   }
   async phase_3(): Promise<any> {
    
-   let matrix_R_1: Square_Hill_Matrix = new Square_Hill_Matrix(
+    let matrix_R: Square_Hill_Matrix = new Square_Hill_Matrix(MATRIXORDER, []);
+    let matrix_R_1: Square_Hill_Matrix = new Square_Hill_Matrix(
       MATRIXORDER,
       []
     );
-   
+    let matrix_R_2: Square_Hill_Matrix = new Square_Hill_Matrix(
+      MATRIXORDER,
+      []
+    );
 
+   
     if (this._bValue === 0) {
       let witness_PowerOf_m_inverse = await this._witness.PowerOf(this._witness, -1 * this._mValue);
       let witness_PowerOf_n_inverse = await this._witness.PowerOf(this._witness, -1 * this._nValue);
@@ -175,32 +185,26 @@ export default class Client_Entity {
     } 
     else if (this._bValue === 1) {
      
-      let privateKey_to_k_inverse = new Square_Hill_Matrix(MATRIXORDER, []);
-      let privateKey_to_n_inverse =  new Square_Hill_Matrix(MATRIXORDER, []);
-      
-      privateKey_to_k_inverse = await this._privateKey.PowerOf(this._privateKey, 
-        -1 * this._kValue);
-      privateKey_to_n_inverse = await this._privateKey.PowerOf(this._privateKey, 
-        -1 * this._nValue);
+      let privateKey_to_k_inverse = await this._privateKey.PowerOf(this._privateKey, -1 * this._kValue);
+      let privateKey_to_n_inverse = await this._privateKey.PowerOf(this._privateKey, -1 * this._nValue);
       
       matrix_R_1 = await Square_Hill_Matrix.MultiplyHillMatrices(
         privateKey_to_k_inverse,
         this._challenge
-      ); 
+      ); //P Da^-k
 
       this._challenge_response = await Square_Hill_Matrix.MultiplyHillMatrices(
-        matrix_R_1, privateKey_to_n_inverse); 
+        matrix_R_1,
+        privateKey_to_n_inverse
+      ); 
+    }     
 
-    }
-
-    console.log("Challenge response: ",
-    Transform_Data.Get_Array_From_SquareMatrix(this._challenge_response))
-    
-    
-    return {
+    let dataToReturn = {
       R: Transform_Data.Get_Array_From_SquareMatrix(this._challenge_response),
       Ga: Transform_Data.Get_Array_From_SquareMatrix(this._pubKeyBaseMatA),
-    };
+    }
+    
+    return Transform_Data.getArrayFromObject(dataToReturn);
   }
   
   InitializeKFor() {
@@ -270,10 +274,7 @@ export default class Client_Entity {
 
     privKey = priv_2;
 
-    console.log(
-      "Private key: ",
-      Transform_Data.Get_Array_From_SquareMatrix(privKey)
-    );
+   
     return privKey;
   }
   CreateEigenValuesMatrixFor() {
