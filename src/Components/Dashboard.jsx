@@ -93,11 +93,9 @@ export default function Dashboard() {
           console.log(response.data.data);
           setAllData(response.data.data);
           setDataLoadTable(response.data.data.allArrivals);
-<<<<<<< HEAD
           setDataToCardsReport([
             {
-              icon: <Add fontSize="large" 
-              sx={{ color: "white" }} />,
+              icon: <Add fontSize="large" sx={{ color: "white" }} />,
               title: "Total de días de asistencia",
               percentage: "100%",
               value: allData.allArrivals.length,
@@ -106,45 +104,29 @@ export default function Dashboard() {
               colorBackIcon: "success",
             },
             {
-              icon: <Add fontSize="large" 
-              sx={{ color: "white" }} />,
+              icon: <Add fontSize="large" sx={{ color: "white" }} />,
               title: "Total de llegadas temprano",
-              percentage: Math.ceil(allData.earlyArrivals.length/allData.allArrivals.length*100),
+              percentage: Math.ceil(
+                (allData.earlyArrivals.length / allData.allArrivals.length) *
+                  100
+              ),
               value: allData.earlyArrivals.length,
               percentageColor: "success",
               textForPercentage: "Mes en curso",
               colorBackIcon: "info",
             },
             {
-              icon: <Add fontSize="large" 
-              sx={{ color: "white" }} />,
+              icon: <Add fontSize="large" sx={{ color: "white" }} />,
               title: "Total de llegadas tarde",
-              percentage: Math.ceil(allData.lateArrivals.length/allData.allArrivals.length*100),
+              percentage: Math.ceil(
+                (allData.lateArrivals.length / allData.allArrivals.length) * 100
+              ),
               value: allData.lateArrivals.length,
               percentageColor: "success",
               textForPercentage: "Mes en curso",
               colorBackIcon: "secondary",
             },
-          ])
-=======
-          let dataToCardsActually = dataToCardsReport;
-          dataToCardsActually[0].value = response.data.data.allArrivals.length;
-          dataToCardsActually[0].percentage = Math.ceil(
-            (response.data.data.allArrivals.length / 31) *
-              100
-          );
-          dataToCardsActually[1].value = response.data.data.earlyArrivals.length;
-          dataToCardsActually[1].percentage = Math.ceil(
-            (response.data.data.earlyArrivals.length / response.data.data.allArrivals.length) *
-              100
-          );
-          dataToCardsActually[2].value = response.data.data.lateArrivals.length;
-          dataToCardsActually[2].percentage = Math.ceil(
-            (response.data.data.lateArrivals.length / response.data.data.allArrivals.length) * 100
-          );
-          setDataToCardsReport(dataToCardsActually);
-         
->>>>>>> 047bfe3 (Protocol_Info_Exchanged_JustNumbers)
+          ]);
         }
       })
       .catch((error) => {
@@ -192,11 +174,7 @@ export default function Dashboard() {
         />
         <div className="row justify-content-around d-flex align-content-around">
           {dataToCardsReport.map((item) => (
-<<<<<<< HEAD
-            <div class="col-xl-3  col-sm-6 mb-xl-0 mb-4">
-=======
-            <div className="col-lg-4 col-sm-6 mb-xl-0 mb-4">
->>>>>>> 047bfe3 (Protocol_Info_Exchanged_JustNumbers)
+            <div class="col-lg-4 col-sm-6 mb-xl-0 mb-4">
               <Card_With_Icon
                 colorBackIcon={item.colorBackIcon}
                 icon={item.icon}
