@@ -93,6 +93,10 @@ export default class Services {
         return apiUrl + "/user/status/";
       }
 
+       static getWorkerByTokenUrl(){
+        return apiUrl + "/user/getUser";
+      }
+
 
       //Users
       static getAllUsersNamesUrl() {
@@ -132,7 +136,7 @@ export default class Services {
       }
 
       static getAllWorkersLogUrlCheckInTimes() {
-        return apiUrl + "/worker-log/checkInTimes";
+        return apiUrl + "/worker-log/checkInTimes/";
       }
 
       //AuthenticactionLogs

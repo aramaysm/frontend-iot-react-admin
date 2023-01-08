@@ -35,57 +35,64 @@ const CssFormControl = styled(FormControl)({
   },
 });
 
-export default function Dashboard() {
+export default function Dashboard(props) {
+  const { user } = props;
+
   const [dataLoadTable, setDataLoadTable] = React.useState([]);
   const [messageAlert, setMessageAlert] = React.useState("");
   const [openAlert, setOpenAlert] = React.useState(false);
   const [colorAlert, setColorAlert] = React.useState("");
   const [filtrerBy, setFiltrerBy] = React.useState("");
-  const [hourSelected, setHourSelected] = React.useState("10");
+  const [hourSelected, setHourSelected] = React.useState("8");
+  const [role, setRole] = React.useState("");
   const [allData, setAllData] = React.useState([]);
-  const [dataToCardsReport, setDataToCardsReport] = React.useState([ {
-    icon: <Add fontSize="large" sx={{ color: "white" }} />,
-    title: "Total de días de asistencia",
-    percentage: "0%",
-    value: 0,
-    percentageColor: "success",
-    textForPercentage: "Mes en curso",
-    colorBackIcon: "success",
-  },
-  {
-    icon: <Add fontSize="large" sx={{ color: "white" }} />,
-    title: "Total de llegadas temprano",
-    percentage: 0,
-    value: 0,
-    percentageColor: "success",
-    textForPercentage: "Mes en curso",
-    colorBackIcon: "info",
-  },
-  {
-    icon: <Add fontSize="large" sx={{ color: "white" }} />,
-    title: "Total de llegadas tarde",
-    percentage: 0,
-    value: 0,
-    percentageColor: "success",
-    textForPercentage: "Mes en curso",
-    colorBackIcon: "secondary",
-  }]);
+  const [dataToCardsReport, setDataToCardsReport] = React.useState([
+    {
+      icon: <Add fontSize="large" sx={{ color: "white" }} />,
+      title: "Total de días de asistencia",
+      percentage: "0%",
+      value: 0,
+      percentageColor: "success",
+      textForPercentage: "Mes en curso",
+      colorBackIcon: "success",
+    },
+    {
+      icon: <Add fontSize="large" sx={{ color: "white" }} />,
+      title: "Total de llegadas temprano",
+      percentage: 0,
+      value: 0,
+      percentageColor: "success",
+      textForPercentage: "Mes en curso",
+      colorBackIcon: "info",
+    },
+    {
+      icon: <Add fontSize="large" sx={{ color: "white" }} />,
+      title: "Total de llegadas tarde",
+      percentage: 0,
+      value: 0,
+      percentageColor: "success",
+      textForPercentage: "Mes en curso",
+      colorBackIcon: "secondary",
+    },
+  ]);
 
   const history = useNavigate();
 
   React.useEffect(() => {
     onLoadInfo();
-    
   }, []);
-
-
 
   const onLoadInfo = async () => {
     const tokenLocalStorage = Services.getValueFromCookies();
+    setRole(localStorage.getItem("role"));
+    let api_endpoint =
+    localStorage.getItem("role") === "super-admin"
+        ? Services.getAllAuthLogUrlCheckInTimes()
+        : Services.getAllWorkersLogUrlCheckInTimes();
 
     await axios
       .get(
-        Services.getAllAuthLogUrlCheckInTimes() + hourSelected,
+        api_endpoint + hourSelected,
         Services.getAxiosConfig(tokenLocalStorage)
       )
       .then((response) => {
@@ -96,20 +103,22 @@ export default function Dashboard() {
           let dataToCardsActually = dataToCardsReport;
           dataToCardsActually[0].value = response.data.data.allArrivals.length;
           dataToCardsActually[0].percentage = Math.ceil(
-            (response.data.data.allArrivals.length / 31) *
-              100
+            (response.data.data.allArrivals.length / 31) * 100
           );
-          dataToCardsActually[1].value = response.data.data.earlyArrivals.length;
+          dataToCardsActually[1].value =
+            response.data.data.earlyArrivals.length;
           dataToCardsActually[1].percentage = Math.ceil(
-            (response.data.data.earlyArrivals.length / response.data.data.allArrivals.length) *
+            (response.data.data.earlyArrivals.length /
+              response.data.data.allArrivals.length) *
               100
           );
           dataToCardsActually[2].value = response.data.data.lateArrivals.length;
           dataToCardsActually[2].percentage = Math.ceil(
-            (response.data.data.lateArrivals.length / response.data.data.allArrivals.length) * 100
+            (response.data.data.lateArrivals.length /
+              response.data.data.allArrivals.length) *
+              100
           );
           setDataToCardsReport(dataToCardsActually);
-         
         }
       })
       .catch((error) => {
@@ -129,9 +138,6 @@ export default function Dashboard() {
         }
       });
   };
-
-
-  
 
   const onElementSelect = () => {};
 
@@ -155,26 +161,28 @@ export default function Dashboard() {
             setOpenAlert(false);
           }}
         />
-        <div className="row justify-content-around d-flex align-content-around">
-          {dataToCardsReport.map((item) => (
-            <div className="col-lg-4 col-sm-6 mb-xl-0 mb-4">
-              <Card_With_Icon
-                colorBackIcon={item.colorBackIcon}
-                icon={item.icon}
-                title={item.title}
-                value={item.value}
-                percentage={item.percentage}
-                percentageColor={item.percentageColor}
-                textForPercentage={item.textForPercentage}
-              />
-            </div>
-          ))}
-        </div>
+        {role === "admin" ? (
+          <div className="row justify-content-around d-flex align-content-around">
+            {dataToCardsReport.map((item) => (
+              <div className="col-lg-4 col-sm-6 mb-xl-0 mb-4">
+                <Card_With_Icon
+                  colorBackIcon={item.colorBackIcon}
+                  icon={item.icon}
+                  title={item.title}
+                  value={item.value}
+                  percentage={item.percentage}
+                  percentageColor={item.percentageColor}
+                  textForPercentage={item.textForPercentage}
+                />
+              </div>
+            ))}
+          </div>
+        ) : <div />}
 
-        <div className="row j-c-c mt-5">
+        <div className="row j-c-c mt-3">
           <div className="card col-lg-11 col-12 col-sm-12 ">
             <div className="card-header bg-transparent border-none">
-              <div className="row j-c-b w-100 mt-3">
+              <div className="row j-c-b w-100 mt-1">
                 <div className="col-12 col-sm-12 col-lg-5">
                   <h4>Reporte de accesos al sistema</h4>
                   <hr className="hr-customized" />
@@ -184,31 +192,37 @@ export default function Dashboard() {
                     <div className="col-6 col-sm-6 col-lg-6">
                       <div className="row">
                         <div className="col-12 col-sm-12 col-lg-12">
-                          <div>Holaa</div>
+                          <div></div>
                         </div>
                       </div>
                     </div>
-                    <div className="col-6 col-sm-6 col-lg-6">
-                      <CssFormControl color="info" variant="standard" fullWidth>
-                        <InputLabel id="demo-simple-select-label">
-                          Filtrar por
-                        </InputLabel>
-                        <Select
+                    {role === "admin" ? (
+                      <div className="col-6 col-sm-6 col-lg-6">
+                        <CssFormControl
                           color="info"
-                          label="Filtrar por"
-                          labelId="demo-simple-select-label"
-                          id="demo-simple-select"
-                          value={filtrerBy}
-                          onChange={onChangeFiltrered}
+                          variant="standard"
+                          fullWidth
                         >
-                          {optionsHowToSee.map((opt) => (
-                            <MenuItem id={opt.value} value={opt.value}>
-                              {opt.label}
-                            </MenuItem>
-                          ))}
-                        </Select>
-                      </CssFormControl>
-                    </div>
+                          <InputLabel id="demo-simple-select-label">
+                            Filtrar por
+                          </InputLabel>
+                          <Select
+                            color="info"
+                            label="Filtrar por"
+                            labelId="demo-simple-select-label"
+                            id="demo-simple-select"
+                            value={filtrerBy}
+                            onChange={onChangeFiltrered}
+                          >
+                            {optionsHowToSee.map((opt) => (
+                              <MenuItem id={opt.value} value={opt.value}>
+                                {opt.label}
+                              </MenuItem>
+                            ))}
+                          </Select>
+                        </CssFormControl>
+                      </div>
+                    ) : null}
                   </div>
                 </div>
               </div>
@@ -274,7 +288,6 @@ let dataToGrafic = [
   },
 ];
 
-
 let valuesForColumnColumn = [];
 let columnsValue = [
   {
@@ -295,7 +308,7 @@ let columnsValue = [
   },
   {
     id: "loginAt",
-    label: "Hora de entrada",
+    label: "Horario de acceso",
     minWidth: 170,
     align: "center",
     isObject: true,

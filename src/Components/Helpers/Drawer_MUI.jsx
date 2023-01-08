@@ -104,6 +104,7 @@ export default function MiniDrawer(props) {
   const [open, setOpen] = React.useState(false);
   const [totalNotif, setTotalNotif] = React.useState(0);
   const [openReport, setOpenReport] = React.useState(false);
+  const [itemsForDrawer,setItemsForDrawer] = React.useState([]);
 
   const history = useNavigate();
   const { children, title, itemSelected, ...other } = props;
@@ -119,6 +120,11 @@ export default function MiniDrawer(props) {
   React.useEffect(() => getAllNotifications, []);
 
   const getAllNotifications = () => {
+
+    const role = localStorage.getItem("role");
+
+    setItemsForDrawer(role === "admin" ? itemsForDrawerAdmin : itemsForDrawerSuperAdmin);
+
     //const usernameStorage = Validaciones.getValueFromCookies();
 /*
     axios
@@ -230,13 +236,11 @@ export default function MiniDrawer(props) {
             <ListItemButton
               button
               className={"color-info"}
-              key={item.label}
-              href={item.link}
+              key={item.label}              
               onClick={() => history(item.link)}>
               <ListItemIcon className={"color-info"}>{item.icon}</ListItemIcon>
               <ListItemText
-                primary={item.label}
-                
+                primary={item.label}                
                 className={"color-info"}
               />
             </ListItemButton>
@@ -244,8 +248,7 @@ export default function MiniDrawer(props) {
             <ListItemButton
               button
               className={"color-mediumGray"}
-              key={item.label}
-              href={item.link}
+              key={item.label}              
               onClick={() => history(item.link)}>
               <ListItemIcon>{item.icon}</ListItemIcon>
               <ListItemText
@@ -312,7 +315,23 @@ const itemsForReports = [
   },
 ];
 
-const itemsForDrawer = [
+const itemsForDrawerAdmin = [
+  {
+    label: "Inicio",
+    icon: <HomeIcon className={"color-mediumGray"} />,
+    link: "/",
+  },
+  
+  {
+    label: "Trabajadores",
+    icon: <PaymentIcon className={"color-mediumGray"} />,
+    link: "/workers",
+  },
+  
+ 
+];
+
+const itemsForDrawerSuperAdmin = [
   {
     label: "Inicio",
     icon: <HomeIcon className={"color-mediumGray"} />,
@@ -322,12 +341,7 @@ const itemsForDrawer = [
     label: "Usuarios",
     icon: <PersonIcon className={"color-mediumGray"} />,
     link: "/users",
-  },
-  {
-    label: "Trabajadores",
-    icon: <PaymentIcon className={"color-mediumGray"} />,
-    link: "/workers",
-  },
+  },  
   {
     label: "Dispositivos",
     icon: <ShoppingCartIcon className={"color-mediumGray"} />,
@@ -336,3 +350,4 @@ const itemsForDrawer = [
   
  
 ];
+

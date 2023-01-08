@@ -207,7 +207,7 @@ export default function Devices_Operations() {
           onLoadInfo();
           setOpenDialog(false);
           setMessageAlert("Dispositivo creado con éxito");
-          setOpenAlert(true);
+          setOpenAlert(false);
           setColorAlert("success");
           setErrorField(false);
         }

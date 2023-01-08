@@ -79,6 +79,7 @@ export default function Login(props) {
           let date2 = new Date();
           console.log("Time to login: " + (date2 - date1) / 1000 + " s");
           handleSuccessFullAuth(response.data.data.user);
+          localStorage.setItem('role', response.data.data.user.role.name);
         }
       })
       .catch((error) => {
