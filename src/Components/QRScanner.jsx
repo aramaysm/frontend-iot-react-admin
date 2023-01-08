@@ -137,7 +137,15 @@ export default function QRScaner() {
                 width: 300,
               }}
               onError={handleError}
-              onResult={handleScan}
+              onResult={(result, error) => {
+                if (!!result) {
+                  handleScan(result?.text);
+                }
+      
+                if (!!error) {
+                  console.info(error);
+                }
+              }}
             />
           </div>
           <div className="card-body j-c-c ">
