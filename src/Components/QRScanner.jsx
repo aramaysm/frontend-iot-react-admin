@@ -129,13 +129,7 @@ export default function QRScaner() {
         <div className="col-12 col-lg-11 col-sm-12 card border-none bg-transparent">
           <div className="card-header j-c-c p-2 mb-2 border-none bg-transparent">
             <QrReader
-              constraints={{
-                facingMode: "environment",
-              }}
-              style={{
-                height: 300,
-                width: 300,
-              }}
+             
               onResult={(result, error) => {
                 alert("Result", result);
                 if (result) {
