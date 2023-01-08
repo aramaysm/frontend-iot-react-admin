@@ -1,4 +1,4 @@
-import { QrReader } from 'react-qr-reader';
+import  QrReader  from 'react-qr-reader';
 import React, { Component } from "react";
 import MiniDrawer from "./Helpers/Drawer_MUI";
 import Services from "../Services";
@@ -81,6 +81,8 @@ export default function QRScaner() {
       });
   };
 
+  console.log(window.navigator.userAgent);
+
   const handleError = (err) => {
     console.log("Error: ", err);
   };
@@ -97,7 +99,7 @@ export default function QRScaner() {
         Services.isDeviceAllowed(),
         {
           brand: "",
-          model: "",
+         
         },
         Services.getAxiosConfig(tokenLocalStorage)
       )
