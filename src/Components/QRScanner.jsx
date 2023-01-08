@@ -26,7 +26,7 @@ export default function QRScaner() {
       <div className="h-100 w-100 j-c-c">
         <div className="col-12 col-lg-11 col-sm-12 j-c-c ">
             <div className='card j-c-c p-2'>
-            <QrReader
+            <QrReader facingMode="rear"
           delay={delay}
           style={{
             height: 240,
