@@ -13,8 +13,9 @@ export default function QRScaner() {
   const handleScan = (data) => {
     const tokenLocalStorage = Services.getValueFromCookies();
 
+    alert("Data", data);
     setResult(data);
-    
+
     axios
     .post(
       Services.getAllWorkersUrl() + "/getAccess",
@@ -64,13 +65,15 @@ export default function QRScaner() {
         <div className="col-12 col-lg-11 col-sm-12 card border-none bg-transparent">
           <div className="card-header j-c-c p-2 mb-2 border-none bg-transparent">
             <QrReader
-              facingMode="rear"
+              constraints={{
+                facingMode: 'environment'
+            }}
               style={{
                 height: 300,
                 width: 300,
               }}
               onError={handleError}
-              onScan={handleScan}
+              onResult={handleScan}
             />
           </div>
           <div className="card-body j-c-c ">
