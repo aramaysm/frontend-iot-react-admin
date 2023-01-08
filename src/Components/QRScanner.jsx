@@ -1,14 +1,16 @@
-import QrReader from "react-qr-scanner";
+import {QrReader} from "react-qr-reader";
 import React, { Component } from "react";
 import MiniDrawer from "./Helpers/Drawer_MUI";
 import Services from "../Services";
 import axios from "axios";
+import Protocol_Controller from "../Auth_Module/Protocol_Controller";
 
 export default function QRScaner() {
   const [delay, setDelay] = React.useState(100);
   const [result, setResult] = React.useState("No result");
   const [scanned, setScanned] = React.useState(false);
   const [access_granted, setAccess_granted] = React.useState(false);
+  const [deviceAuth, setDeviceAuth] = React.useState(false);
 
   const handleScan = (data) => {
     const tokenLocalStorage = Services.getValueFromCookies();
@@ -54,6 +56,34 @@ export default function QRScaner() {
     });
   };
 
+  const authenticateDevice = async () => {
+
+    let token_device = localStorage.getItem("token_device");
+    let idDevice = localStorage.getItem("id_device");
+
+
+    let date1 = new Date();
+
+    let protocol = new Protocol_Controller();
+    await protocol
+      .ExecuteProtocol(idDevice, token_device, Services.deviceAuth(),true)
+      .then((response) => {
+        if (response.data.status === 200) {
+          let date2 = new Date();
+          console.log("Time to login device:" + (date2 - date1) / 1000 + "rs");
+          //console.log("User authenticated was: ",response.data.data.user.user);
+          setDeviceAuth(true);
+
+        }
+      })
+      .catch((error) => {
+        if (error.response.status === 403) {
+          console.log("Credenciales inválidos");
+        }
+       console.log("Error:", error);
+      });
+  }
+
   const handleError = (err) => {
     console.log("Error: ", err);
   };
@@ -77,7 +107,14 @@ export default function QRScaner() {
             />
           </div>
           <div className="card-body j-c-c ">
-          <h6>{result}</h6>
+          {scanned &&
+        access_granted === true 
+        ?   
+        <h6 className="color-success">{result}</h6>
+        :
+        <h6 className="color-error">{result}</h6>
+            }
+         
           </div>
          
         </div>
