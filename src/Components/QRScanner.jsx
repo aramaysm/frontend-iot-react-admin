@@ -138,8 +138,8 @@ export default function QRScaner() {
               }}
               onError={handleError}
               onResult={(result, error) => {
-                if (!!result) {
-                  handleScan(result?.text);
+                if (result) {
+                  handleScan(result);
                 }
       
                 if (!!error) {
