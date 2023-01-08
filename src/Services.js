@@ -153,6 +153,18 @@ export default class Services {
        static deviceAuth(){
         return apiUrl + "/devices/login/";
       }
+
+      static getDeviceHandlerCredentials(){
+        return apiUrl + "/devices-handlers/getCredentials";
+      }
+
+      static isDeviceAllowed(){
+        return apiUrl + "/devices-handlers/isAllowed";
+      }
+
+      static deviceAuth(){
+        return apiUrl + "/devices/login/";
+      }
 }
 
 //Hosted
