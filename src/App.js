@@ -39,8 +39,7 @@ export default function App(props) {
         <Route path="/devices" element={<Devices_Operations />} />
         <Route path="/users" element={<Users_Operations />} />
         <Route path="/workers" element={<Workers_Operations />} />
-        <Route path="/info" element={<UserInfo_Card user={user}/>} />
-        <Route path="/qrscanner" element={<QRScaner/>} />
+        
       </Routes>
     </Router>
   );

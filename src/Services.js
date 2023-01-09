@@ -170,5 +170,5 @@ export default class Services {
 //Hosted
 //let apiUrl = "https://iot-platform-api-nest.onrender.com";
 //Local let apiUrl = "http://localhost:8080";
-let apiUrl = "http://localhost:8080";
+let apiUrl = "https://iot-platform-api-nest.onrender.com";
 let encripted_Token = '';

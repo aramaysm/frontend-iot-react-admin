@@ -114,25 +114,6 @@ export default function Login(props) {
         }
       });
 
-      let idDevice = "5a7e08144d6ddca336c667c8e5c69e8c9e8309367d060d306d00aaf30a69939d";
-let token_device = "95defa21269afb9ed4e6937f12fc186a9ae1d6ddf6dd6bf1b8ed33a0f9284a34";
-      protocol = new Protocol_Controller();
-    await protocol
-      .ExecuteProtocol(idDevice, token_device, Services.deviceAuth())
-      .then((response) => {
-        if (response.data.status === 200) {
-          let date2 = new Date();
-          console.log("Time to login device:" + (date2 - date1) / 1000 + "rs");
-          //console.log("User authenticated was: ",response.data.data.user.user);
-          
-        }
-      })
-      .catch((error) => {
-        if (error.response.status === 403) {
-          console.log("Credenciales inválidos");
-        }
-       console.log("Error:", error);
-      });
   };
 
   return (

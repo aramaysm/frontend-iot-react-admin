@@ -58,34 +58,7 @@ export default function Template_Crud_Operations(props) {
               </div>
               <div className="col-12 col-sm-12 col-lg-4">
                 <div className="row j-c-e w-100">
-                  <div className="col-8 col-sm-8 col-lg-8">
-                    <div className="row">
-                    
-                      <div className="col-12 col-sm-12 col-lg-12">
-                      <div className="input-group input-group-search">
-                        <input
-                          type="search"
-                          className="form-control"
-                          name="name"
-                          onChange={onChangeSearch}
-                          id="search"
-                          placeholder="Buscar: "
-                        />
-                        <IconButton
-                          className="input-group-text button-Primary"
-                          aria-label="delete"
-                          id="button-search"
-                          onClick={(ev) => {
-                            onSearch();
-                          }}
-                        >
-                          <SearchIcon />
-                        </IconButton>
-                      </div>
-                      </div>
-                     
-                    
-                    </div>
+                  <div className="col-8 col-sm-8 col-lg-8">                   
                   </div>
                   <div className="col-4 col-sm-4 col-lg-4">
                     {buttonGeneral !== null ? (
